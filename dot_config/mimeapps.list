@@ -1,0 +1,28 @@
+[Added Associations]
+image/bmp=org.kde.gwenview.desktop;
+image/gif=org.kde.gwenview.desktop;
+image/jpeg=gwenview-3.desktop;gwenview-2.desktop;gwenview.desktop;org.kde.gwenview.desktop;
+image/png=org.kde.gwenview.desktop;
+image/svg+xml=org.kde.gwenview.desktop;
+image/tiff=org.kde.gwenview.desktop;
+image/webp=org.kde.gwenview.desktop;
+
+[Default Applications]
+image/bmp=org.kde.gwenview.desktop
+image/gif=org.kde.gwenview.desktop
+image/jpeg=gwenview-3.desktop;
+image/png=org.kde.gwenview.desktop
+image/svg+xml=org.kde.gwenview.desktop
+image/tiff=org.kde.gwenview.desktop
+image/webp=org.kde.gwenview.desktop
+text/html=google-chrome.desktop
+x-scheme-handler/about=google-chrome.desktop
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/mailto=google-chrome.desktop
+x-scheme-handler/postman=Postman.desktop
+x-scheme-handler/unknown=google-chrome.desktop
+x-scheme-handler/webcal=google-chrome.desktop
+x-scheme-handler/slack=slack.desktop
+x-scheme-handler/antigravity=antigravity.desktop

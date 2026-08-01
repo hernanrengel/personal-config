@@ -62,6 +62,7 @@ CONFIG_DIRS=(
     "nwg-look"
     "fusuma"
     "nvim"
+    "systemd"
 )
 
 for dir in "${CONFIG_DIRS[@]}"; do
@@ -74,10 +75,12 @@ for dir in "${CONFIG_DIRS[@]}"; do
     fi
 done
 
-if [ -f "$HOME/.config/starship.toml" ]; then
-    echo -e "  -> Backing up ~/.config/starship.toml"
-    cp "$HOME/.config/starship.toml" dot_config/
-fi
+for file in "starship.toml" "mimeapps.list" "chrome-flags.conf"; do
+    if [ -f "$HOME/.config/$file" ]; then
+        echo -e "  -> Backing up ~/.config/$file"
+        cp "$HOME/.config/$file" dot_config/
+    fi
+done
 
 # 3.5 Backup VS Code / IDE configurations (selectively to avoid massive cache/history dirs)
 echo -e "${YELLOW}[3.5/8] Backing up VS Code/IDE configurations selectively...${NC}"

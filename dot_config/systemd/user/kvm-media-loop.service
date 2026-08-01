@@ -1,0 +1,11 @@
+[Unit]
+Description=KVM Media Loopback Script
+After=pipewire.service wireplumber.service
+
+[Service]
+ExecStart=/home/brosso3d/bin/kvm-media-loop.sh
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target

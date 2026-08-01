@@ -1,0 +1,8 @@
+[Unit]
+Description=Random wallpaper from archimg.cc
+
+[Service]
+Type=oneshot
+ExecStart=/home/brosso3d/.local/bin/random-wallpaper.sh
+Environment=WAYLAND_DISPLAY=wayland-1
+Environment=DISPLAY=:0
