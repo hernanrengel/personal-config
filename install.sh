@@ -96,10 +96,37 @@ if [ -d dot_config ]; then
     for item in dot_config/*; do
         if [ -e "$item" ]; then
             name="$(basename "$item")"
+            # Skip VS Code/IDE config directories to avoid symlinking the entire folder (leads to cache pollution)
+            if [ "$name" = "Code - OSS" ] || [ "$name" = "Code" ] || [ "$name" = "VSCodium" ] || [ "$name" = "Cursor" ]; then
+                continue
+            fi
             symlink_item "$item" "$HOME/.config/$name"
         fi
     done
 fi
+
+# 5.5 Restore VS Code / IDE configurations (individual files to avoid cache pollution in repo)
+for vscode_dir in "Code - OSS" "Code" "VSCodium" "Cursor"; do
+    if [ -d "dot_config/$vscode_dir" ]; then
+        echo -e "${YELLOW}Symlinking VS Code ($vscode_dir) settings...${NC}"
+        mkdir -p "$HOME/.config/$vscode_dir/User"
+        
+        # Link settings.json
+        if [ -f "dot_config/$vscode_dir/User/settings.json" ]; then
+            symlink_item "$REPO_DIR/dot_config/$vscode_dir/User/settings.json" "$HOME/.config/$vscode_dir/User/settings.json"
+        fi
+        
+        # Link keybindings.json
+        if [ -f "dot_config/$vscode_dir/User/keybindings.json" ]; then
+            symlink_item "$REPO_DIR/dot_config/$vscode_dir/User/keybindings.json" "$HOME/.config/$vscode_dir/User/keybindings.json"
+        fi
+        
+        # Link snippets directory
+        if [ -d "dot_config/$vscode_dir/User/snippets" ]; then
+            symlink_item "$REPO_DIR/dot_config/$vscode_dir/User/snippets" "$HOME/.config/$vscode_dir/User/snippets"
+        fi
+    fi
+done
 
 # 6. Restore Home Dotfiles
 echo -e "${YELLOW}Symlinking home dotfiles...${NC}"
@@ -108,11 +135,20 @@ if [ -d home ]; then
         # Avoid looping . and ..
         [ "$(basename "$item")" = "." ] && continue
         [ "$(basename "$item")" = ".." ] && continue
+        # Skip subdirectories like home/sdkman (handled separately)
+        [ -d "$item" ] && continue
         if [ -f "$item" ]; then
             name="$(basename "$item")"
             symlink_item "$item" "$HOME/$name"
         fi
     done
+fi
+
+# 6.5 Restore SDKMAN configuration
+if [ -f "$REPO_DIR/home/sdkman/config" ]; then
+    echo -e "${YELLOW}Restoring SDKMAN configuration...${NC}"
+    mkdir -p "$HOME/.sdkman/etc"
+    symlink_item "$REPO_DIR/home/sdkman/config" "$HOME/.sdkman/etc/config"
 fi
 
 # 7. Restore Scripts & Bin

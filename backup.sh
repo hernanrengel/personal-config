@@ -60,6 +60,8 @@ CONFIG_DIRS=(
     "gtk-3.0"
     "gtk-4.0"
     "nwg-look"
+    "fusuma"
+    "nvim"
 )
 
 for dir in "${CONFIG_DIRS[@]}"; do
@@ -77,6 +79,31 @@ if [ -f "$HOME/.config/starship.toml" ]; then
     cp "$HOME/.config/starship.toml" dot_config/
 fi
 
+# 3.5 Backup VS Code / IDE configurations (selectively to avoid massive cache/history dirs)
+echo -e "${YELLOW}[3.5/8] Backing up VS Code/IDE configurations selectively...${NC}"
+for vscode_dir in "Code - OSS" "Code" "VSCodium" "Cursor"; do
+    if [ -d "$HOME/.config/$vscode_dir/User" ]; then
+        echo -e "  -> Backing up VS Code ($vscode_dir) configs..."
+        mkdir -p "dot_config/$vscode_dir/User"
+        
+        # Copy settings.json if it exists
+        if [ -f "$HOME/.config/$vscode_dir/User/settings.json" ]; then
+            cp "$HOME/.config/$vscode_dir/User/settings.json" "dot_config/$vscode_dir/User/"
+        fi
+        
+        # Copy keybindings.json if it exists
+        if [ -f "$HOME/.config/$vscode_dir/User/keybindings.json" ]; then
+            cp "$HOME/.config/$vscode_dir/User/keybindings.json" "dot_config/$vscode_dir/User/"
+        fi
+        
+        # Copy snippets folder if it exists
+        if [ -d "$HOME/.config/$vscode_dir/User/snippets" ]; then
+            rm -rf "dot_config/$vscode_dir/User/snippets"
+            cp -r "$HOME/.config/$vscode_dir/User/snippets" "dot_config/$vscode_dir/User/"
+        fi
+    fi
+done
+
 # 4. Backup Home Dotfiles
 echo -e "${YELLOW}[4/8] Backing up home dotfiles...${NC}"
 HOME_FILES=(
@@ -84,6 +111,7 @@ HOME_FILES=(
     ".gitconfig"
     ".gitconfig-bluetrail"
     ".gtkrc-2.0"
+    ".fvmrc"
 )
 
 for file in "${HOME_FILES[@]}"; do
@@ -94,6 +122,13 @@ for file in "${HOME_FILES[@]}"; do
         echo -e "  -> ${YELLOW}Skipped ~/$file (Not found)${NC}"
     fi
 done
+
+# 4.5 Backup SDKMAN configuration
+if [ -f "$HOME/.sdkman/etc/config" ]; then
+    echo -e "  -> Backing up ~/.sdkman/etc/config"
+    mkdir -p home/sdkman
+    cp "$HOME/.sdkman/etc/config" home/sdkman/config
+fi
 
 # 5. Backup custom scripts from ~/scripts (excluding node_modules)
 echo -e "${YELLOW}[5/8] Backing up ~/scripts (excluding node_modules)...${NC}"

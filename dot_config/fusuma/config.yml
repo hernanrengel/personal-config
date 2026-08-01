@@ -1,0 +1,36 @@
+swipe:
+  3:
+    left:
+      command: "hyprctl dispatch workspace e+1"
+    right:
+      command: "hyprctl dispatch workspace e-1"
+    up:
+      command: "wofi --show drun"
+    down:
+      command: "hyprctl dispatch killactive"
+  4:
+    left:
+      command: "hyprctl dispatch movetoworkspacesilent e+1"
+    right:
+      command: "hyprctl dispatch movetoworkspacesilent e-1"
+    up:
+      command: "hyprctl dispatch fullscreen 0"
+    down:
+      command: "hyprctl dispatch togglefloating"
+
+pinch:
+  3:
+    in:
+      command: "hyprctl dispatch centerwindow"
+    out:
+      command: "hyprctl dispatch centerwindow"
+
+threshold:
+  swipe: 0.3
+interval:
+  swipe: 0.8
+
+plugin:
+  inputs:
+    libinput_command_input:
+      enable-tap: true

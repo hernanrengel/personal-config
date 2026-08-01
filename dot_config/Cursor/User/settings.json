@@ -1,0 +1,6 @@
+{
+    "window.commandCenter": true,
+    "workbench.colorTheme": "One Dark Pro",
+    "redhat.telemetry.enabled": true,
+    "editor.formatOnSave": true
+}
