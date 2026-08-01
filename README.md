@@ -1,67 +1,67 @@
 # Personal Configuration (dotfiles) - Arch Linux + Hyprland
 
-Este repositorio contiene toda mi configuración personal, incluyendo configuraciones de aplicaciones, scripts, temas visuales, cursores, fuentes y fondos de pantalla. Está diseñado para poder clonarse en una nueva computadora con Arch Linux y restaurar exactamente el mismo entorno de trabajo y experiencia de usuario ejecutando un único script.
+This repository contains my personal system configurations (dotfiles), including application settings, custom scripts, visual themes, cursor sets, custom fonts, and wallpapers. It is designed to be cloned onto a fresh Arch Linux installation and run as a single script to completely reconstruct my working environment and user experience.
 
-## Estructura del Proyecto
+## Project Structure
 
-El repositorio está organizado de la siguiente manera:
-- **`backup.sh`**: Script para recopilar y actualizar las configuraciones locales de la computadora actual en este repositorio.
-- **`install.sh`**: Script único de restauración para instalar los paquetes y enlazar las configuraciones en la nueva computadora.
-- **`packages/`**: Listas de paquetes explícitamente instalados (tanto nativos de Arch con `pacman` como desde el AUR con `yay`/`paru`).
-- **`dot_config/`**: Copia de carpetas de configuración de aplicaciones (mapeadas a `~/.config/`). Incluye Hyprland, Waybar, Alacritty, Kitty, Cava, Wofi, Lazygit, Yazi, Swaync, Wlogout, etc.
-- **`home/`**: Archivos del directorio personal (mapeados a `~/`), como tu `.zshrc`, `.gitconfig` y `.gtkrc-2.0`.
-- **`bin/`** y **`local_bin/`**: Scripts de usuario personalizados (mapeados a `~/bin` y `~/.local/bin/`). Los binarios compilados pesados (como `terraform` o `uv`) se excluyen automáticamente para mantener el repositorio ligero.
-- **`scripts/`**: Scripts adicionales personalizados de automatización (mapeados a `~/scripts/`).
-- **`wallpapers/`**: Imágenes de fondos de pantalla personalizados y recursos locales de wallpapers. El repositorio de fondos masivo de `mylinuxforwork` se clona dinámicamente durante la instalación para ahorrar espacio en Git.
-- **`themes/`** y **`icons/`**: Temas e iconos personalizados, como el tema `Graphite-Dark`.
+The repository is organized as follows:
+- **`backup.sh`**: A script to gather and update configurations from your local system into this repository.
+- **`install.sh`**: The main restoration script that installs all packages and symlinks configurations on the new system.
+- **`packages/`**: Lists of explicitly installed packages (native packages via `pacman` and AUR packages via `yay`/`paru`).
+- **`dot_config/`**: Copies of application configurations (mapping to `~/.config/`). Includes settings for Hyprland, Waybar, Alacritty, Kitty, Cava, Wofi, Lazygit, Yazi, Swaync, Wlogout, etc.
+- **`home/`**: Files mapping to the user's home directory (`~/`), such as `.zshrc`, `.gitconfig`, and `.gtkrc-2.0`.
+- **`bin/`** and **`local_bin/`**: Custom user scripts (mapping to `~/bin/` and `~/.local/bin/`). Heavy compiled binaries (e.g. `terraform`, `uv`) are automatically excluded to keep the repository lightweight.
+- **`scripts/`**: Additional automation scripts (mapping to `~/scripts/`).
+- **`wallpapers/`**: Custom wallpaper files and local assets. The massive `mylinuxforwork` wallpaper repository is cloned dynamically during installation to save Git storage space.
+- **`themes/`** and **`icons/`**: Custom visual styles and icon packages, including the `Graphite-Dark` theme suite.
 
 ---
 
-## Cómo usar el sistema de respaldo
+## How to Use the Backup System
 
-### 1. En tu computadora actual (Guardar cambios)
-Cada vez que realices cambios en tus configuraciones locales, añade nuevos scripts o instales paquetes y desees respaldarlos en este repositorio, simplemente ejecuta:
+### 1. On Your Current Computer (Saving Changes)
+Whenever you make updates to your configurations, write new scripts, or install new packages that you want to back up:
 
 ```bash
 ./backup.sh
 ```
 
-El script actualizará las listas de paquetes y copiará los archivos de configuración modificados al repositorio. Después, puedes guardar los cambios en Git y subirlos a tu servidor remoto (por ejemplo, GitHub):
+The script will update the package lists and copy modified configurations to the repository. You can then commit and push these changes to GitHub:
 
 ```bash
 git add .
-git commit -m "update: sincronizar ultimas configuraciones y scripts"
+git commit -m "update: sync latest configurations and scripts"
 git push origin main
 ```
 
 ---
 
-### 2. En la nueva computadora (Restaurar todo)
-Una vez que hayas instalado Arch Linux en tu nueva computadora, abre una terminal y sigue estos pasos:
+### 2. On Your New Computer (Restoring Everything)
+Once you have installed Arch Linux on your new machine, open a terminal and run the following commands:
 
-1. **Clona este repositorio**:
+1. **Clone this repository**:
    ```bash
-   git clone <URL-DE-TU-REPOSITORIO> ~/personal-config
+   git clone https://github.com/hernanrengel/personal-config.git ~/personal-config
    ```
 
-2. **Entra al directorio**:
+2. **Navigate to the directory**:
    ```bash
    cd ~/personal-config
    ```
 
-3. **Ejecuta el script de instalación**:
+3. **Run the installation script**:
    ```bash
    ./install.sh
    ```
 
-### ¿Qué hace el script de restauración automáticamente?
-1. **Comprobación de Sistema**: Verifica que estás en Arch Linux.
-2. **Bootstrap del AUR Helper**: Si no tienes un gestor de AUR (`yay` o `paru`), descarga y compila `yay-bin` de forma totalmente automática.
-3. **Instalación de Aplicaciones**: Lee las listas en `packages/` e instala todos tus programas y herramientas de desarrollo (tanto nativos de Arch como de AUR) de forma masiva y silenciosa.
-4. **Respaldo de Seguridad**: Si en la nueva computadora ya existen archivos en `~/.config/` o dotfiles, los renombra añadiendo la extensión `.backup` para que no pierdas nada de información.
-5. **Creación de Enlaces Simbólicos (Symlinks)**: Crea enlaces simbólicos desde el repositorio clonado hacia las carpetas reales (`~/.config`, `~/`, `~/scripts`, etc.). 
+### What does the installation script do automatically?
+1. **OS Check**: Verifies that the host system is running Arch Linux.
+2. **AUR Helper Bootstrap**: Installs development utilities and compiles `yay` automatically if no AUR helper is detected.
+3. **Package Installation**: Installs all native pacman and AUR packages from your stored list silently and efficiently.
+4. **Safety Backups**: Detects pre-existing files/folders in `~/.config/` or `~/` and renames them with a `.backup` suffix so you do not lose any existing local data.
+5. **Symlink Deployment**: Creates symbolic links from your cloned repository to your system directories (e.g., `~/.config/hypr` points to the repository folder).
    > [!NOTE]
-   > Al usar enlaces simbólicos, cualquier modificación futura que hagas en tus programas (ej. cambiar colores en Hyprland o editar tu `.zshrc`) modificará directamente los archivos dentro del repositorio de configuración local. Así sólo tienes que hacer `git commit` y `git push` para mantenerlo todo actualizado sin tener que copiar archivos manualmente.
-6. **Instalación de Oh My Zsh y Plugins**: Descarga Oh My Zsh y clona los plugins más útiles (`zsh-autosuggestions` y `zsh-syntax-highlighting`).
-7. **Fondos de Pantalla**: Clona de manera eficiente (con profundidad 1) el set de wallpapers de `mylinuxforwork` y enlaza tus fondos locales.
-8. **Configuración del Shell**: Cambia tu shell por defecto a `Zsh` para que todo cargue de inmediato.
+   > By using symbolic links, any future configuration tweaks you make (such as editing `hyprland.conf` or updating your `.zshrc`) will write directly to the files in the local Git repository. This lets you simply run `git commit` and `git push` to keep your backups updated without copying files.
+6. **Shell Setup**: Installs Oh My Zsh and clones custom plugins (`zsh-autosuggestions` and `zsh-syntax-highlighting`).
+7. **Wallpaper Restoration**: Performs a fast, shallow clone (`--depth 1`) of the `mylinuxforwork/wallpaper` pack and links your personal wallpapers.
+8. **Default Shell Activation**: Automatically changes the default system shell to Zsh for your user account.
