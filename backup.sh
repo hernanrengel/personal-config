@@ -115,6 +115,7 @@ HOME_FILES=(
     ".gitconfig-bluetrail"
     ".gtkrc-2.0"
     ".fvmrc"
+    ".mcp.json"
 )
 
 for file in "${HOME_FILES[@]}"; do

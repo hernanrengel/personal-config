@@ -1,0 +1,16 @@
+# Cursor Rules - Arch Linux + Hyprland Dotfiles
+
+Please follow these guidelines when editing or suggesting files in this project:
+
+## General Context
+This is a personal configuration repository (dotfiles) designed to bootstrap an Arch Linux system running Hyprland, Waybar, and custom Python/Bash popups.
+
+## Key Rules
+1. **Never Backup Cache/Secrets:** Do not backup full directories for browsers, credentials, or node_modules. Only version-control specific configuration files.
+2. **Refer to CLAUDE.md:** Read `CLAUDE.md` for a list of system commands, scripts layout, and project architecture.
+3. **Modifying Keybindings:** Add or change keybindings inside `dot_config/hypr/hyprland.conf` under the keybindings section (starts at line 185). Use the `$mainMod` variable (SUPER).
+4. **Shell Scripting:**
+   - Always start scripts with `#!/usr/bin/env bash` or standard POSIX headers.
+   - Use `set -euo pipefail` for error handling in utility scripts.
+   - Output colored terminal messages for installation/restoration tasks using the predefined colors (`GREEN`, `BLUE`, `YELLOW`, `RED`).
+5. **Install and Backup Scripts:** If you add a new app configuration or tool, update both `backup.sh` and `install.sh` to ensure it is backed up and restored properly.
