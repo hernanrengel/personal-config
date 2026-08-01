@@ -1,0 +1,116 @@
+@import url("/home/brosso3d/.cache/wal/colors-waybar.css");
+
+/*
+ * ─────────────────────────────────────────────────────────────
+ *  NAKED / EDITORIAL  ·  pywal · no backgrounds · underline accent
+ *  importance = a 2px accent underline, not a pill. Lots of air.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+* {
+    font-family: 'JetBrainsMono Nerd Font Propo', monospace;
+    font-size: 12px;
+    font-weight: 300;
+    min-height: 0;
+    transition: color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+}
+
+window#waybar {
+    background-color: transparent;
+    color: @wb-fg;
+    min-height: 36px;
+}
+box, widget, separator { background-color: transparent; border: none; }
+window#waybar.hidden { opacity: 0.15; }
+button { border: none; background: transparent; }
+
+/* ── Naked modules: no bg, no border, just text + airy spacing ── */
+#custom-playerctl,
+#custom-hw-icon, #memory, #cpu, #temperature, #custom-gpu, #custom-gpu-mode,
+#network, #pulseaudio, #battery, #power-profiles-daemon,
+#custom-bluetooth, #custom-super-drag, #custom-monitor-toggle,
+#custom-kb-backlight, #clock {
+    background-color: transparent;
+    color: @wb-muted;
+    border: none;
+    border-bottom: 2px solid transparent;   /* reserved so hover doesn't jump */
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0 6px;
+    margin: 0 8px;
+}
+
+/* Hover — reveal with foreground color + accent underline */
+#custom-playerctl:hover,
+#custom-hw-icon:hover, #memory:hover, #cpu:hover, #temperature:hover,
+#custom-gpu:hover, #custom-gpu-mode:hover, #network:hover, #pulseaudio:hover,
+#battery:hover, #custom-bluetooth:hover, #custom-super-drag:hover,
+#custom-monitor-toggle:hover, #custom-kb-backlight:hover {
+    color: @wb-fg;
+    border-bottom-color: alpha(@wb-accent, 0.7);
+}
+
+/* ── Drawer handle — the only standing accent ───────────────── */
+#custom-hw-icon { color: @wb-accent; }
+#hardware { background: transparent; border: none; box-shadow: none; padding: 0; margin: 0; }
+
+/* ── Player — editorial italic ──────────────────────────────── */
+#custom-playerctl { font-style: italic; }
+
+/* ── Clock — typographic focal point ────────────────────────── */
+#clock {
+    color: @wb-fg;
+    font-weight: 400;
+    padding: 0 8px;
+}
+
+/* ── Workspaces — underline marks the active one ────────────── */
+#workspaces {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0 6px;
+}
+#workspaces button {
+    background-color: transparent;
+    color: @wb-muted;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    padding: 2px 10px;
+    margin: 0 2px;
+    font-weight: 300;
+    opacity: 0.45;
+    transition: color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+}
+#workspaces button.active {
+    color: @wb-fg;
+    border-bottom: 2px solid @wb-accent;
+    font-weight: 600;
+    opacity: 1;
+}
+#workspaces button:not(.active):hover {
+    color: @wb-fg;
+    border-bottom-color: alpha(@wb-accent, 0.4);
+    opacity: 0.9;
+}
+
+/* ── States ─────────────────────────────────────────────────── */
+#battery.critical:not(.charging) {
+    color: @wb-urgent;
+    border-bottom-color: alpha(@wb-urgent, 0.7);
+    animation: naked-blink 1s ease-in-out infinite alternate;
+}
+@keyframes naked-blink { from { opacity: 1; } to { opacity: 0.4; } }
+#battery.charging { color: @wb-accent2; }
+#network.disconnected { color: @wb-urgent; border-bottom-color: alpha(@wb-urgent, 0.7); }
+#pulseaudio.muted { color: alpha(@wb-muted, 0.5); }
+#temperature.critical { color: @wb-urgent; border-bottom-color: alpha(@wb-urgent, 0.7); }
+
+#power-profiles-daemon.performance { color: @wb-urgent; }
+#power-profiles-daemon.power-saver { color: @wb-accent2; }
+#custom-gpu-mode.nvidia { color: @wb-urgent; }
+#custom-gpu-mode.integrated { color: @wb-accent2; }
+
+label:focus { background-color: transparent; }

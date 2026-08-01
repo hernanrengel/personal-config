@@ -1,0 +1,13 @@
+[user]
+	email = hrengelc@gmail.com
+	name = brosso3D
+[core]
+	editor = true
+[credential "https://github.com"]
+	helper = 
+	helper = !/home/brosso3d/.local/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/home/brosso3d/.local/bin/gh auth git-credential
+[includeIf "gitdir:~/Developer/bluetrail/"]
+	path = ~/.gitconfig-bluetrail

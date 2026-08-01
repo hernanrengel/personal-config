@@ -1,0 +1,31 @@
+#!/bin/bash
+
+FILES=(
+  "/home/brosso3d/.gemini/config/mcp_config.json"
+  "/home/brosso3d/.gemini/antigravity/mcp_config.json"
+  "/home/brosso3d/.gemini/antigravity-ide/mcp_config.json"
+  "/home/brosso3d/.gemini/antigravity-backup/mcp_config.json"
+)
+
+if jq -e '.disabledMcpServers["dart-mcp-server"]' "${FILES[0]}" >/dev/null 2>&1; then
+  echo "Enabling Dart MCP server..."
+  for file in "${FILES[@]}"; do
+    if [ -f "$file" ]; then
+      tmp=$(mktemp)
+      jq '.mcpServers["dart-mcp-server"] = .disabledMcpServers["dart-mcp-server"] | del(.disabledMcpServers["dart-mcp-server"])' "$file" > "$tmp" && mv "$tmp" "$file"
+    fi
+  done
+  echo "Dart MCP server is now ENABLED. Please restart your agent session/editor to apply changes."
+else
+  echo "Disabling Dart MCP server..."
+  for file in "${FILES[@]}"; do
+    if [ -f "$file" ]; then
+      tmp=$(mktemp)
+      jq '.disabledMcpServers["dart-mcp-server"] = (.mcpServers["dart-mcp-server"] // .mcpServers["_dart-mcp-server"]) | del(.mcpServers["dart-mcp-server"], .mcpServers["_dart-mcp-server"])' "$file" > "$tmp" && mv "$tmp" "$file"
+    fi
+  done
+  # Kill active processes if any
+  pkill -f "dart language-server" 2>/dev/null
+  pkill -f "dart mcp-server" 2>/dev/null
+  echo "Dart MCP server is now DISABLED and active processes have been stopped."
+fi

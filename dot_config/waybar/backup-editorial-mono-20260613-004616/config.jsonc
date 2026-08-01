@@ -1,0 +1,183 @@
+// -*- mode: jsonc -*-
+{
+    // "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    "margin-top": 13,
+    "margin-right": 20,
+    "margin-left": 20,
+    // "width": 1280, // Waybar width
+    // Choose the order of the modules
+
+    "custom/bluetooth": {
+        "exec": "~/.config/waybar/scripts/bluetooth.sh",
+        "interval": 5,
+        "return-type": "json",
+        "on-click": "~/.local/bin/bluetooth-popup.sh",
+        "on-click-right": "blueman-manager"
+    },
+    "custom/player-prev": {
+        "format": "",
+        "on-click": "playerctl --ignore-player=mpv previous",
+        "return-type": "text"
+    },
+    "custom/playerctl": {
+        "format": "{}",
+        "exec": "playerctl --ignore-player=mpv metadata --format '{{emoji(status)}} {{artist}} - {{title}}' 2>/dev/null || echo ' No Music'",
+        "max-length": 40,
+        "on-click": "playerctl --ignore-player=mpv play-pause",
+        "on-scroll-up": "playerctl --ignore-player=mpv next",
+        "on-scroll-down": "playerctl --ignore-player=mpv previous",
+        "interval": 2,
+        "return-type": "text"
+    },
+    "custom/player-next": {
+        "format": "",
+        "on-click": "playerctl --ignore-player=mpv next",
+        "return-type": "text"
+    },
+    "custom/monitor-toggle": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh --status",
+        "on-click": "/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh --toggle",
+        "interval": 2,
+        "tooltip": true
+    },
+    "custom/super-drag": {
+        "exec": "/home/brosso3d/.config/hypr/scripts/super-drag-status.sh",
+        "interval": 2,
+        "on-click": "/home/brosso3d/.config/hypr/scripts/toggle-super-drag.sh",
+        "tooltip": false,
+        "format": "{}"
+    },
+    "modules-left": [
+        "custom/playerctl",
+        "memory",
+        "cpu",
+        "temperature",
+        "custom/gpu",
+        "custom/gpu-mode",
+        "battery"
+    ],
+    "modules-center": [
+        "hyprland/workspaces"
+    ],
+    "modules-right": [
+        "custom/super-drag",
+        "custom/monitor-toggle",
+        "custom/kb-backlight",
+        "pulseaudio",
+        "custom/bluetooth",
+        "network",
+        "power-profiles-daemon",
+        "clock"
+    ],
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "persistent-workspaces": {
+            "*": 5, // 5 workspaces by default on every monitor
+            "HDMI-A-1": 3 // but only three on HDMI-A-1
+        }
+    },
+    "clock": {
+        "format": "{:%H:%M · %A %d of %B (%m)}",
+        "tooltip-format": "<big>{:%A, %B %d, %Y}</big>\n<tt><small>{calendar}</small></tt>",
+        "on-click": "~/.local/bin/calendar-popup.sh"
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false,
+        "on-click": "~/.local/bin/stats-popup.sh"
+    },
+    "custom/gpu": {
+        "exec": "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | awk '{print $1\"% 󰾲\"}' || echo '󰾲 off'",
+        "interval": 3,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "~/.local/bin/stats-popup.sh"
+    },
+    "custom/gpu-mode": {
+        "exec": "~/.config/waybar/scripts/gpu-mode.sh",
+        "interval": 5,
+        "return-type": "json",
+        "on-click": "~/.config/waybar/scripts/gpu-mode-cycle.sh",
+        "tooltip": true
+    },
+    "custom/kb-backlight": {
+        "exec": "~/.config/waybar/scripts/kb-backlight.sh",
+        "interval": 3,
+        "return-type": "json",
+        "on-click": "~/.config/waybar/scripts/kb-backlight-cycle.sh",
+        "tooltip": true
+    },
+    "memory": {
+        "format": "{}% ",
+        "on-click": "~/.local/bin/stats-popup.sh"
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+        "states": {
+            "good": 95,
+            "warning": 35,
+            "critical": 25
+        },
+        "format": "{capacity}% {icon}",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "on-click": "~/.local/bin/battery-popup.sh",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "on-click": "asusctl profile next",
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+      }
+    },
+    "network": {
+        "format-wifi": "{essid} ",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "on-click": "~/.local/bin/wofi-wifi-menu.sh"
+    },
+    "pulseaudio": {
+        "format": "{volume}% {icon}",
+        "format-muted": " Muted",
+        "format-icons": {
+            "headphones": "",
+            "handsfree": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "~/.local/bin/audio-popup.sh",
+        "on-click-right": "pavucontrol",
+        "on-scroll-up": "pamixer -i 5",
+        "on-scroll-down": "pamixer -d 5"
+    }
+}

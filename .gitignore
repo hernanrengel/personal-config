@@ -1,0 +1,14 @@
+# Exclude node_modules from scripts
+scripts/node_modules/
+
+# Exclude sensitive Google API credentials and tokens
+scripts/google_credentials.json
+scripts/google_token.json
+
+# Cache directories
+.cache/
+*.log
+
+# Exclude system files
+.DS_Store
+Thumbs.db

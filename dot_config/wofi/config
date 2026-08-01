@@ -1,0 +1,13 @@
+width=580
+height=460
+prompt=
+allow_images=true
+image_size=28
+columns=1
+mode=drun
+insensitive=true
+allow_markup=true
+no_actions=true
+hide_scroll=true
+dynamic_lines=true
+gtk_dark=true

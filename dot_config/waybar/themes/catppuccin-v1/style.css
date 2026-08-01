@@ -1,0 +1,148 @@
+/*
+ * ─────────────────────────────────────────────────────────────
+ *  CATPPUCCIN CAPSULE  ·  centered floating island
+ *  Catppuccin Mocha · per-category color · glow flair (no pywal)
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Catppuccin Mocha palette ───────────────────────────────── */
+@define-color base     #1e1e2e;
+@define-color mantle   #181825;
+@define-color crust    #11111b;
+@define-color surface0 #313244;
+@define-color surface1 #45475a;
+@define-color overlay0 #6c7086;
+@define-color text     #cdd6f4;
+@define-color subtext  #a6adc8;
+@define-color rosewater #f5e0dc;
+@define-color pink     #f5c2e7;
+@define-color mauve    #cba6f7;
+@define-color red      #f38ba8;
+@define-color maroon   #eba0ac;
+@define-color peach    #fab387;
+@define-color yellow   #f9e2af;
+@define-color green    #a6e3a1;
+@define-color teal     #94e2d5;
+@define-color sky      #89dceb;
+@define-color sapphire #74c7ec;
+@define-color blue     #89b4fa;
+@define-color lavender #b4befe;
+
+* {
+    font-family: 'JetBrainsMono Nerd Font', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    min-height: 0;
+    transition: background-image 0.25s ease, color 0.25s ease,
+                border-color 0.25s ease, box-shadow 0.25s ease,
+                text-shadow 0.25s ease;
+}
+
+window#waybar {
+    background-color: transparent;
+    color: @text;
+    min-height: 40px;
+}
+box, widget, separator { background-color: transparent; border: none; }
+window#waybar.hidden { opacity: 0.15; }
+button { border: none; background: transparent; }
+
+/* ── Candy pills (the floating island lives in modules-center) ─ */
+#clock, #custom-playerctl, #memory, #cpu, #temperature, #custom-gpu,
+#custom-gpu-mode, #custom-hw-icon, #pulseaudio, #network,
+#custom-bluetooth, #power-profiles-daemon, #battery {
+    background-image: linear-gradient(to bottom, @surface0, @base);
+    color: @text;
+    border: 1px solid alpha(@overlay0, 0.35);
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35), inset 0 1px 0 alpha(@text, 0.05);
+    padding: 0 13px;
+    margin: 0 4px;
+    min-height: 26px;
+}
+
+/* ── Per-category color (text + matching border tint) ───────── */
+#clock                 { color: @lavender; border-color: alpha(@lavender, 0.45); font-weight: 700; }
+#custom-playerctl      { color: @pink;     border-color: alpha(@pink, 0.40);  font-style: italic; }
+#custom-hw-icon        { color: @teal;     border-color: alpha(@teal, 0.45); }
+#memory                { color: @green;    border-color: alpha(@green, 0.40); }
+#cpu                   { color: @blue;     border-color: alpha(@blue, 0.40); }
+#temperature           { color: @peach;    border-color: alpha(@peach, 0.40); }
+#custom-gpu            { color: @red;      border-color: alpha(@red, 0.40); }
+#custom-gpu-mode       { color: @maroon;   border-color: alpha(@maroon, 0.40); }
+#pulseaudio            { color: @pink;     border-color: alpha(@pink, 0.40); }
+#network               { color: @sapphire; border-color: alpha(@sapphire, 0.40); }
+#custom-bluetooth      { color: @blue;     border-color: alpha(@blue, 0.40); }
+#power-profiles-daemon { color: @yellow;   border-color: alpha(@yellow, 0.40); }
+#battery               { color: @green;    border-color: alpha(@green, 0.40); }
+
+/* ── Hover — lift + soft lavender glow ──────────────────────── */
+#clock:hover, #custom-playerctl:hover, #memory:hover, #cpu:hover,
+#temperature:hover, #custom-gpu:hover, #custom-gpu-mode:hover,
+#custom-hw-icon:hover, #pulseaudio:hover, #network:hover,
+#custom-bluetooth:hover, #power-profiles-daemon:hover, #battery:hover {
+    background-image: linear-gradient(to bottom, @surface1, @surface0);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.45), 0 0 12px alpha(@lavender, 0.30);
+    border-color: alpha(@lavender, 0.65);
+}
+
+/* ── Hardware drawer ────────────────────────────────────────── */
+#hardware { background: transparent; border: none; box-shadow: none; padding: 0; margin: 0; }
+#custom-hw-icon { padding: 0 14px; }
+
+/* ── Workspaces — dots with animated glow on the active ─────── */
+#workspaces {
+    background-image: linear-gradient(to bottom, @surface0, @base);
+    border: 1px solid alpha(@mauve, 0.40);
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35), inset 0 1px 0 alpha(@text, 0.05);
+    padding: 2px 8px;
+    margin: 0 6px;
+}
+#workspaces button {
+    background: transparent;
+    color: @overlay0;
+    border: none;
+    border-radius: 999px;
+    padding: 0 5px;
+    margin: 0 1px;
+    font-size: 11px;
+    opacity: 0.6;
+    transition: color 0.25s ease, opacity 0.25s ease, text-shadow 0.25s ease;
+}
+#workspaces button.active {
+    color: @mauve;
+    opacity: 1;
+    animation: ws-pulse 2s ease-in-out infinite alternate;
+}
+@keyframes ws-pulse {
+    from { text-shadow: 0 0 4px alpha(@mauve, 0.4); }
+    to   { text-shadow: 0 0 12px alpha(@mauve, 0.95); }
+}
+#workspaces button:not(.active):hover {
+    color: @lavender;
+    opacity: 0.9;
+    text-shadow: 0 0 6px alpha(@lavender, 0.5);
+}
+
+/* ── States ─────────────────────────────────────────────────── */
+#battery.critical:not(.charging) {
+    color: @red;
+    border-color: alpha(@red, 0.7);
+    animation: cat-blink 0.9s ease-in-out infinite alternate;
+}
+@keyframes cat-blink {
+    from { box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 0 6px alpha(@red, 0.3); }
+    to   { box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 0 18px alpha(@red, 0.8); }
+}
+#battery.charging { color: @green; border-color: alpha(@green, 0.7); }
+#network.disconnected { color: @red; border-color: alpha(@red, 0.6); }
+#pulseaudio.muted { color: @overlay0; border-color: alpha(@overlay0, 0.3); }
+#temperature.critical { color: @red; border-color: alpha(@red, 0.7); }
+
+#power-profiles-daemon.performance { color: @red; border-color: alpha(@red, 0.5); }
+#power-profiles-daemon.power-saver { color: @teal; border-color: alpha(@teal, 0.5); }
+#custom-gpu-mode.nvidia { color: @green; border-color: alpha(@green, 0.5); }
+#custom-gpu-mode.integrated { color: @sky; border-color: alpha(@sky, 0.5); }
+
+label:focus { background-color: transparent; }

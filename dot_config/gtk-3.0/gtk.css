@@ -1,0 +1,64 @@
+/* gsimplecal glassmorphism theme — scoped to avoid affecting other GTK apps */
+
+/* Main window */
+.gsimplecal-mainwindow {
+    background-color: rgba(17, 17, 27, 0.92);
+    border: 1px solid rgba(137, 180, 250, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+    padding: 8px;
+    color: #cdd6f4;
+}
+
+calendar {
+    background-color: transparent;
+    color: #cdd6f4;
+    border: none;
+    border-radius: 12px;
+    padding: 4px;
+}
+
+/* Navigation arrows */
+calendar button {
+    background-color: transparent;
+    border: none;
+    color: #89b4fa;
+    border-radius: 8px;
+    padding: 4px 8px;
+    min-width: 28px;
+    min-height: 28px;
+}
+
+calendar button:hover {
+    background-color: rgba(137, 180, 250, 0.15);
+    color: #cdd6f4;
+}
+
+/* Day names header */
+calendar .header {
+    background-color: transparent;
+    color: #6c7086;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+/* Today highlight */
+calendar.highlight {
+    background-color: rgba(137, 180, 250, 0.25);
+    color: #89b4fa;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+/* Selected day */
+calendar:selected {
+    background-color: rgba(137, 180, 250, 0.35);
+    color: #89b4fa;
+    border-radius: 50%;
+    border: 1px solid rgba(137, 180, 250, 0.6);
+}
+
+/* Days outside current month */
+calendar.other-month {
+    color: rgba(108, 112, 134, 0.5);
+}

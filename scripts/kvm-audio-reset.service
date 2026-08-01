@@ -1,0 +1,13 @@
+[Unit]
+Description=Reset audio after KVM switch
+After=sound.target
+
+[Service]
+Type=oneshot
+User=brosso3d
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+ExecStart=/home/brosso3d/scripts/kvm-audio-reset.sh
+
+[Install]
+WantedBy=multi-user.target

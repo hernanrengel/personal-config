@@ -1,0 +1,352 @@
+@import url("/home/brosso3d/.cache/wal/colors-waybar.css");
+
+/* ── Base ────────────────────────────────────────────────── */
+* {
+    font-family: 'JetBrainsMono Nerd Font Propo', 'CaskaydiaCove Nerd Font', monospace;
+    font-size: 12px;
+    min-height: 0;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ── Bar ─────────────────────────────────────────────────── */
+window#waybar {
+    background-color: transparent;
+    color: @wb-fg;
+    min-height: 36px;
+}
+
+/* ── Quitar fondos cuadrados de contenedores GTK ─────────── */
+box, separator, widget {
+    background-color: transparent;
+    border: none;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+button:hover {
+    background: inherit;
+}
+
+/* ── Generic module pill ─────────────────────────────────── */
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#wireplumber,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#power-profiles-daemon,
+#custom-weather,
+#custom-bluetooth,
+#custom-volume,
+#custom-monitor-toggle,
+#custom-super-drag,
+#temperature,
+#custom-gpu,
+#custom-gpu-mode,
+#custom-kb-backlight,
+#mpd {
+    background-color: alpha(@wb-bg, 0.82);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.06);
+    color: @wb-accent;
+    border: 1px solid alpha(@wb-accent, 0.22);
+    border-radius: 12px;
+    min-height: 26px;
+    padding: 0 12px;
+    margin: 0 3px;
+}
+
+/* ── System group — connected pill ──────────────────────── */
+#memory {
+    border-radius: 12px 0 0 12px;
+    border-right: none;
+    margin-right: 0;
+}
+
+#cpu,
+#temperature,
+#custom-gpu,
+#custom-gpu-mode {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#battery {
+    border-radius: 0 12px 12px 0;
+    border-left: none;
+    margin-left: 0;
+}
+
+/* ── No hover on clock ───────────────────────────────────── */
+#clock:hover {
+    background-color: alpha(@wb-bg, 0.82);
+    border-color: alpha(@wb-accent, 0.22);
+    color: @wb-accent;
+}
+
+/* ── Hover on interactive modules ────────────────────────── */
+#battery:hover,
+#cpu:hover,
+#memory:hover,
+#network:hover,
+#pulseaudio:hover,
+#custom-monitor-toggle:hover,
+#custom-bluetooth:hover,
+#custom-super-drag:hover,
+#custom-gpu:hover,
+#temperature:hover {
+    background-color: alpha(@wb-accent, 0.12);
+    border-color: alpha(@wb-accent, 0.5);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.08);
+    color: @wb-fg;
+}
+
+/* ── Workspaces ──────────────────────────────────────────── */
+#workspaces {
+    background-color: alpha(@wb-bg, 0.82);
+    border: 1px solid alpha(@wb-accent, 0.22);
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.06);
+    padding: 3px 5px;
+    margin: 0 4px;
+}
+
+#workspaces button {
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: @wb-muted;
+    font-size: 8px;
+    font-weight: normal;
+    margin: 0 1px;
+    min-width: 14px;
+    padding: 1px 5px;
+    opacity: 0.5;
+    transition: background-color 0.25s ease, border-color 0.25s ease,
+                color 0.25s ease, padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.25s ease;
+}
+
+#workspaces button.active {
+    background-color: alpha(@wb-accent, 0.22);
+    border: 1px solid alpha(@wb-accent, 0.5);
+    border-radius: 6px;
+    color: @wb-accent;
+    font-size: 8px;
+    font-weight: bold;
+    min-width: 14px;
+    opacity: 1;
+    padding: 1px 16px;
+    animation: ws-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes ws-pulse {
+    from { box-shadow: 0 0 5px alpha(@wb-accent, 0.2); }
+    to   { box-shadow: 0 0 16px alpha(@wb-accent, 0.6); }
+}
+
+#workspaces button:not(.active):hover {
+    background-color: alpha(@wb-accent, 0.1);
+    border-color: alpha(@wb-accent, 0.3);
+    box-shadow: 0 0 6px alpha(@wb-accent, 0.12);
+    color: @wb-fg;
+    opacity: 1;
+}
+
+/* ── Player pill — standalone ────────────────────────────── */
+#custom-playerctl {
+    background-color: alpha(@wb-bg, 0.82);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.06);
+    color: @wb-accent;
+    border: 1px solid alpha(@wb-accent, 0.22);
+    border-radius: 12px;
+    min-width: 130px;
+    min-height: 26px;
+    padding: 0 12px;
+    margin: 0 3px;
+}
+
+#custom-playerctl:hover {
+    background-color: alpha(@wb-accent, 0.12);
+    border-color: alpha(@wb-accent, 0.5);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.08);
+    color: @wb-fg;
+}
+
+/* ── Toggle group (right) — connected pill ───────────────── */
+#custom-super-drag {
+    border-radius: 12px 0 0 12px;
+    border-right: none;
+    margin-right: 0;
+}
+
+#custom-monitor-toggle {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#custom-kb-backlight {
+    border-radius: 0 12px 12px 0;
+    border-left: none;
+    margin-left: 0;
+}
+
+/* ── Audio+connectivity group (right) — connected pill ───── */
+#pulseaudio {
+    border-radius: 12px 0 0 12px;
+    border-right: none;
+    margin-right: 0;
+}
+
+#custom-bluetooth {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#network {
+    border-radius: 0 12px 12px 0;
+    border-left: none;
+    margin-left: 0;
+}
+
+/* ── Clock ───────────────────────────────────────────────── */
+#clock {
+    padding: 0 18px;
+}
+
+/* ── Battery states ──────────────────────────────────────── */
+#battery.critical:not(.charging) {
+    background-color: alpha(@wb-urgent, 0.15);
+    border-color: alpha(@wb-urgent, 0.5);
+    color: @wb-urgent;
+    animation-name: blink;
+    animation-duration: 0.8s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    from { background-color: alpha(@wb-urgent, 0.15); }
+    to   { background-color: alpha(@wb-urgent, 0.35); }
+}
+
+/* ── Network ─────────────────────────────────────────────── */
+#network.disconnected {
+    background-color: alpha(@wb-urgent, 0.15);
+    border-color: alpha(@wb-urgent, 0.5);
+    color: @wb-urgent;
+}
+
+/* ── Audio ───────────────────────────────────────────────── */
+#pulseaudio.muted {
+    color: @wb-muted;
+    border-color: alpha(@wb-muted, 0.3);
+}
+
+/* ── Power profile ───────────────────────────────────────── */
+
+#power-profiles-daemon.performance {
+    color: @wb-urgent;
+    border-color: alpha(@wb-urgent, 0.3);
+}
+
+#power-profiles-daemon.balanced {
+    color: @wb-accent;
+}
+
+#power-profiles-daemon.power-saver {
+    color: @wb-accent2;
+    border-color: alpha(@wb-accent2, 0.3);
+}
+
+/* ── GPU mode pill ───────────────────────────────────────── */
+#custom-gpu-mode {
+    padding: 0 14px;
+}
+
+#custom-gpu-mode.hybrid {
+    color: @wb-accent;
+    border-color: alpha(@wb-accent, 0.3);
+}
+
+#custom-gpu-mode.integrated {
+    color: @wb-accent2;
+    border-color: alpha(@wb-accent2, 0.3);
+}
+
+#custom-gpu-mode.nvidia {
+    color: @wb-urgent;
+    border-color: alpha(@wb-urgent, 0.3);
+}
+
+#custom-gpu-mode:hover {
+    background-color: alpha(@wb-accent, 0.12);
+    border-color: alpha(@wb-accent, 0.5);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.08);
+    color: @wb-fg;
+}
+
+/* ── Keyboard backlight pill ─────────────────────────────── */
+#custom-kb-backlight.off  { color: @wb-muted; border-color: alpha(@wb-muted, 0.2); }
+#custom-kb-backlight.low  { color: @wb-accent; border-color: alpha(@wb-accent, 0.2); }
+#custom-kb-backlight.med  { color: @wb-accent; border-color: alpha(@wb-accent, 0.35); }
+#custom-kb-backlight.high { color: @wb-fg; border-color: alpha(@wb-accent, 0.5); }
+
+#custom-kb-backlight:hover {
+    background-color: alpha(@wb-accent, 0.12);
+    border-color: alpha(@wb-accent, 0.5);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.08);
+    color: @wb-fg;
+}
+
+/* ── Monitor toggle ──────────────────────────────────────── */
+#custom-monitor-toggle.dual          { opacity: 1.0; }
+#custom-monitor-toggle.external-only { opacity: 0.85; }
+#custom-monitor-toggle.laptop-only   { opacity: 0.65; }
+
+/* ── Temperature ─────────────────────────────────────────── */
+#temperature.critical {
+    background-color: alpha(@wb-urgent, 0.2);
+    border-color: alpha(@wb-urgent, 0.5);
+    color: @wb-urgent;
+}
+
+/* ── Tray ────────────────────────────────────────────────── */
+#tray > .passive         { -gtk-icon-effect: dim; }
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: alpha(@wb-urgent, 0.2);
+    border-color: alpha(@wb-urgent, 0.5);
+}
+
+/* ── Scratchpad ──────────────────────────────────────────── */
+#scratchpad       { background: alpha(@wb-accent, 0.1); }
+#scratchpad.empty { background-color: transparent; border-color: transparent; }
+
+/* ── Mode ────────────────────────────────────────────────── */
+#mode {
+    background-color: alpha(@wb-accent, 0.2);
+    border-color: alpha(@wb-accent, 0.6);
+    color: @wb-accent;
+}
+
+label:focus { background-color: transparent; }

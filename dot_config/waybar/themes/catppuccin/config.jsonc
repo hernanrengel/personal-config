@@ -1,0 +1,232 @@
+// -*- mode: jsonc -*-
+// THEME: Catppuccin Islands — 3 floating capsules, centered
+{
+    "position": "top",
+    "margin-top": 12,
+    "margin-right": 20,
+    "margin-left": 20,
+
+    "custom/media-prev": {
+        "format": "󰒮",
+        "tooltip": false,
+        "on-click": "playerctl --ignore-player=mpv previous"
+    },
+    "custom/media-playpause": {
+        "exec": "~/.config/waybar/scripts/media-playpause.sh",
+        "format": "{}",
+        "interval": 1,
+        "tooltip": false,
+        "on-click": "playerctl --ignore-player=mpv play-pause"
+    },
+    "custom/media-next": {
+        "format": "󰒭",
+        "tooltip": false,
+        "on-click": "playerctl --ignore-player=mpv next"
+    },
+    "custom/notif": {
+        "exec": "~/.config/waybar/scripts/notif.sh",
+        "return-type": "json",
+        "interval": 2,
+        "tooltip": true,
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw"
+    },
+    "custom/power": {
+        "format": "󰐥",
+        "tooltip": false,
+        "on-click": "wlogout"
+    },
+    "custom/cava": {
+        "exec": "~/.config/waybar/scripts/cava.sh",
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "~/.local/bin/audio-popup.sh"
+    },
+    "custom/bluetooth": {
+        "exec": "~/.config/waybar/scripts/bluetooth.sh",
+        "interval": 5,
+        "return-type": "json",
+        "on-click": "~/.local/bin/bluetooth-popup.sh",
+        "on-click-right": "blueman-manager"
+    },
+    "custom/playerctl": {
+        "format": "{}",
+        "exec": "playerctl --ignore-player=mpv metadata --format '{{emoji(status)}} {{title}}' 2>/dev/null || echo ''",
+        "max-length": 24,
+        "on-click": "playerctl --ignore-player=mpv play-pause",
+        "on-scroll-up": "playerctl --ignore-player=mpv next",
+        "on-scroll-down": "playerctl --ignore-player=mpv previous",
+        "interval": 2,
+        "return-type": "text"
+    },
+    "custom/hw-icon": {
+        "format": "󰘚",
+        "tooltip": false,
+        "on-click": "~/.local/bin/stats-popup.sh"
+    },
+    "custom/monitor-toggle": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh --status",
+        "on-click": "/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh --toggle",
+        "interval": 2,
+        "tooltip": true
+    },
+    "custom/super-drag": {
+        "exec": "/home/brosso3d/.config/hypr/scripts/super-drag-status.sh",
+        "interval": 2,
+        "on-click": "/home/brosso3d/.config/hypr/scripts/toggle-super-drag.sh",
+        "tooltip": false,
+        "format": "{}"
+    },
+    "custom/kb-backlight": {
+        "exec": "~/.config/waybar/scripts/kb-backlight.sh",
+        "interval": 3,
+        "return-type": "json",
+        "on-click": "~/.config/waybar/scripts/kb-backlight-cycle.sh",
+        "tooltip": true
+    },
+
+    "group/island-a": {
+        "orientation": "horizontal",
+        "modules": [ "clock", "hyprland/workspaces" ]
+    },
+    "group/hardware": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 350,
+            "transition-left-to-right": true,
+            "click-to-reveal": false
+        },
+        "modules": [ "custom/hw-icon", "memory", "cpu", "temperature", "custom/gpu", "custom/gpu-mode" ]
+    },
+    "group/island-music": {
+        "orientation": "horizontal",
+        "modules": [ "custom/media-prev", "custom/media-playpause", "custom/media-next", "custom/playerctl", "custom/cava" ]
+    },
+    "group/island-utils": {
+        "orientation": "horizontal",
+        "modules": [ "custom/monitor-toggle", "custom/super-drag", "custom/kb-backlight" ]
+    },
+    "group/island-c": {
+        "orientation": "horizontal",
+        "modules": [ "pulseaudio", "network", "custom/bluetooth", "power-profiles-daemon", "battery", "custom/notif", "custom/power" ]
+    },
+
+    // ── Floating islands, centered ──────────────────────────
+    "modules-left": [],
+    "modules-center": [ "group/island-a", "group/island-music", "group/hardware", "group/island-utils", "group/island-c" ],
+    "modules-right": [],
+
+    "hyprland/workspaces": {
+        "format": "{icon}{windows}",
+        "format-icons": { "default": "○", "active": "●" },
+        "format-window-separator": "",
+        "window-rewrite-default": " 󰣆",
+        "window-rewrite": {
+            "class<firefox>": " 󰈹",
+            "class<google-chrome>": " 󰊯",
+            "class<Chromium>": " 󰊯",
+            "class<Code>": " 󰨞",
+            "class<code-oss>": " 󰨞",
+            "class<kitty>": " 󰆍",
+            "class<Alacritty>": " 󰆍",
+            "class<foot>": " 󰆍",
+            "class<discord>": " 󰙯",
+            "class<vesktop>": " 󰙯",
+            "class<Spotify>": " 󰓇",
+            "class<thunar>": " 󰉋",
+            "class<org.gnome.Nautilus>": " 󰉋",
+            "class<obsidian>": " 󰠮",
+            "class<org.telegram.desktop>": " 󰔁"
+        },
+        "persistent-workspaces": { "*": 5, "HDMI-A-1": 3 }
+    },
+
+    "clock": {
+        "format": "{:%H:%M}",
+        "tooltip-format": "<big>{:%A, %B %d, %Y}</big>\n<tt><small>{calendar}</small></tt>",
+        "on-click": "~/.local/bin/calendar-popup.sh"
+    },
+    "cpu": {
+        "format": "{usage}% 󰻠",
+        "tooltip": false,
+        "on-click": "~/.local/bin/stats-popup.sh"
+    },
+    "custom/gpu": {
+        "exec": "v=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null); case \"$v\" in ''|*[!0-9]*) echo '󰾲 off';; *) echo \"$v% 󰾲\";; esac",
+        "interval": 3,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "~/.local/bin/stats-popup.sh"
+    },
+    "custom/gpu-mode": {
+        "exec": "~/.config/waybar/scripts/gpu-mode.sh",
+        "interval": 5,
+        "return-type": "json",
+        "on-click": "~/.config/waybar/scripts/gpu-mode-cycle.sh",
+        "tooltip": true
+    },
+    "memory": {
+        "interval": 3,
+        "format": "{percentage}% 󰍛",
+        "tooltip-format": "RAM {used:0.1f} GiB / {total:0.1f} GiB ({percentage}%)",
+        "on-click": "~/.local/bin/stats-popup.sh"
+    },
+    "temperature": {
+        "critical-threshold": 80,
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["󱃃", "󰔏", "󰸁"]
+    },
+    "battery": {
+        "bat": "BAT0",
+        "adapter": "ADP1",
+        "states": { "good": 95, "warning": 35, "critical": 25 },
+        "format": "{capacity}% {icon}",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% {icon}",
+        "format-plugged": "{capacity}% {icon}",
+        "on-click": "~/.local/bin/battery-popup.sh",
+        "format-icons": {
+            "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
+            "default":  ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+        }
+    },
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+        "tooltip": true,
+        "on-click": "asusctl profile next",
+        "format-icons": {
+            "default": "󰊚",
+            "performance": "󱐋",
+            "balanced": "󰊚",
+            "power-saver": "󰌪"
+        }
+    },
+    "network": {
+        "format-wifi": "{signalStrength}% {icon}",
+        "format-ethernet": "󰈀",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ifname} via {gwaddr}",
+        "tooltip-format": "{ifname} via {gwaddr}",
+        "format-linked": "󰤩",
+        "format-disconnected": "󰤮",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "on-click": "~/.local/bin/wofi-wifi-menu.sh"
+    },
+    "pulseaudio": {
+        "format": "{volume}% {icon}  {format_source}",
+        "format-muted": "󰝟  {format_source}",
+        "format-source": "{volume}% 󰍬",
+        "format-source-muted": "󰍭",
+        "format-icons": {
+            "headphones": "󰋋",
+            "headset": "󰋎",
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "~/.local/bin/audio-popup.sh",
+        "on-click-right": "pavucontrol",
+        "on-scroll-up": "pamixer -i 5",
+        "on-scroll-down": "pamixer -d 5"
+    }
+}

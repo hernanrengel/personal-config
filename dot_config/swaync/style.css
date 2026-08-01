@@ -1,0 +1,298 @@
+@import url("/home/brosso3d/.cache/wal/colors-wb.css");
+
+:root {
+  --border-radius: 16px;
+  --notification-icon-size:       64px;
+  --notification-app-icon-size:   calc(var(--notification-icon-size) / 3);
+  --notification-group-icon-size: 32px;
+}
+
+* {
+  font-family: 'Inter', 'JetBrainsMono Nerd Font Propo', monospace;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+/* ── Control Center panel ─────────────────────────────── */
+.control-center {
+  /* Mismo "material isla" que la barra: gradiente + highlight superior + borde de acento */
+  background-color: alpha(@wb-bg, 0.90);
+  background-image: linear-gradient(to bottom, alpha(@wb-surface, 0.92), alpha(@wb-bg, 0.97));
+  border: 1px solid alpha(@wb-accent, 0.45);
+  border-radius: 18px;
+  box-shadow: inset 0 1px 0 alpha(#ffffff, 0.06), 0 8px 32px alpha(#000000, 0.55);
+  padding: 8px;
+  margin: 8px;
+}
+
+/* ── Top header row ───────────────────────────────────── */
+.top-action-buttons {
+  background: transparent;
+  padding: 4px 8px;
+}
+
+.control-center-list {
+  background: transparent;
+}
+
+/* ── Notification cards ───────────────────────────────── */
+.notification-row:focus,
+.notification-row:hover {
+  opacity: 1;
+}
+
+.notification {
+  background-color: alpha(@wb-bg, 0.90);
+  background-image: linear-gradient(to bottom, alpha(@wb-surface, 0.92), alpha(@wb-bg, 0.97));
+  border: 1px solid alpha(@wb-accent, 0.30);
+  border-radius: var(--border-radius);
+  box-shadow: inset 0 1px 0 alpha(#ffffff, 0.05);
+  color: @wb-fg;
+  margin: 4px 6px;
+  padding: 12px;
+}
+
+.notification:hover {
+  background: alpha(@wb-bg, 0.95);
+  border-color: alpha(@wb-accent, 0.5);
+}
+
+/* Urgency tint on left border */
+.notification.critical { border-left: 3px solid #f38ba8; }
+.notification.normal   { border-left: 3px solid @wb-accent; }
+.notification.low      { border-left: 3px solid alpha(@wb-accent, 0.4); }
+
+/* ── Notification content ─────────────────────────────── */
+.notification-content { padding: 0; }
+
+.notification-default-action,
+.notification-action {
+  background: transparent;
+  border: none;
+  color: @wb-fg;
+  padding: 0;
+}
+
+.notification-default-action:hover { background: transparent; }
+
+.notification-action {
+  background: alpha(@wb-bg, 0.6);
+  border: 1px solid alpha(@wb-accent, 0.22);
+  border-radius: 8px;
+  color: @wb-accent;
+  margin: 4px 2px 0;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.notification-action:hover {
+  background: alpha(@wb-accent, 0.15);
+  border-color: alpha(@wb-accent, 0.6);
+}
+
+/* ── App name / summary / body ────────────────────────── */
+.summary        { color: @wb-fg;    font-weight: bold; font-size: 13px; }
+.time           { color: @wb-muted; font-size: 11px; }
+.body           { color: @wb-fg;    font-size: 12px; opacity: 0.85; }
+.app-name       { color: @wb-accent; font-size: 11px; font-weight: bold; }
+
+/* ── Close button ─────────────────────────────────────── */
+.close-button {
+  background: alpha(@wb-bg, 0.8);
+  border: none;
+  border-radius: 50%;
+  color: @wb-fg;
+  min-height: 20px;
+  min-width:  20px;
+  padding: 0;
+}
+
+.close-button:hover {
+  background: #f38ba8;
+  color: @wb-bg;
+}
+
+/* ── Grouped notifications ────────────────────────────── */
+.notification-group {
+  margin: 4px 8px;
+  border: 1px solid alpha(@wb-accent, 0.22);
+  border-radius: var(--border-radius);
+}
+
+.notification-group-headers {
+  color: @wb-muted;
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+.notification-group-icon { color: @wb-accent; }
+
+.notification-group > box > box > button {
+  background: alpha(@wb-bg, 0.8);
+  border: none;
+  border-radius: 8px;
+  color: @wb-fg;
+  margin: 2px;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.notification-group > box > box > button:hover {
+  background: alpha(@wb-accent, 0.2);
+  color: @wb-accent;
+}
+
+/* ── Floating (popup) notifications ──────────────────── */
+.floating-notifications { background: transparent; }
+
+.floating-notifications > box > box > box.notification {
+  border-radius: var(--border-radius);
+}
+
+/* ── Buttons row (DND, Clear All) ─────────────────────── */
+.control-center-dnd { margin: 6px 10px; }
+
+.control-center-dnd slider {
+  background: @wb-accent;
+  border-radius: 50%;
+  min-height: 14px;
+  min-width:  14px;
+}
+
+.control-center-dnd trough {
+  background: alpha(@wb-bg, 0.6);
+  border-radius: 8px;
+  min-height: 6px;
+}
+
+button.control-center-clear-all-button {
+  background: alpha(#f38ba8, 0.15);
+  border: 1px solid alpha(#f38ba8, 0.4);
+  border-radius: 10px;
+  color: #f38ba8;
+  margin: 4px 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
+button.control-center-clear-all-button:hover {
+  background: alpha(#f38ba8, 0.3);
+  border-color: #f38ba8;
+}
+
+/* ── Widget: Title ────────────────────────────────────── */
+.widget-title {
+  color: @wb-fg;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 6px 12px 2px;
+}
+
+/* ── Widget: DND toggle ───────────────────────────────── */
+.widget-dnd { margin: 4px 8px; }
+
+.widget-dnd > switch {
+  background: alpha(@wb-bg, 0.7);
+  border: 1px solid alpha(@wb-accent, 0.22);
+  border-radius: 12px;
+}
+
+.widget-dnd > switch:checked {
+  background: alpha(@wb-accent, 0.3);
+  border-color: @wb-accent;
+}
+
+.widget-dnd > switch slider {
+  background: @wb-accent;
+  border-radius: 10px;
+  min-height: 18px;
+  min-width:  18px;
+}
+
+/* ── Widget: Buttons grid ────────────────────────────── */
+.widget-buttons-grid { padding: 4px 8px; gap: 6px; }
+
+.widget-buttons-grid > flowbox > flowboxchild > button {
+  background: alpha(@wb-bg, 0.7);
+  border: 1px solid alpha(@wb-accent, 0.22);
+  border-radius: 10px;
+  color: @wb-fg;
+  min-height: 44px;
+  min-width:  80px;
+  padding: 8px;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button:hover {
+  background: alpha(@wb-accent, 0.15);
+  border-color: alpha(@wb-accent, 0.5);
+  color: @wb-accent;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button.active {
+  background: alpha(@wb-accent, 0.25);
+  border-color: @wb-accent;
+  color: @wb-accent;
+}
+
+/* ── Widget: Volume / Backlight ───────────────────────── */
+.widget-volume,
+.widget-backlight { padding: 4px 12px; }
+
+.widget-volume > trough,
+.widget-backlight > trough {
+  background: alpha(@wb-bg, 0.7);
+  border-radius: 8px;
+  min-height: 6px;
+  border: 1px solid alpha(@wb-accent, 0.22);
+}
+
+.widget-volume > trough > highlight,
+.widget-backlight > trough > highlight {
+  background: linear-gradient(90deg, @wb-accent, @wb-accent2);
+  border-radius: 8px;
+}
+
+.widget-volume > trough > slider,
+.widget-backlight > trough > slider {
+  background: @wb-accent;
+  border-radius: 50%;
+  min-height: 14px;
+  min-width:  14px;
+}
+
+/* ── Widget: MPris ────────────────────────────────────── */
+.widget-mpris { padding: 4px 8px; }
+
+.widget-mpris-player {
+  background: alpha(@wb-bg, 0.8);
+  border: 1px solid alpha(@wb-accent, 0.22);
+  border-radius: 12px;
+  padding: 10px;
+  margin: 4px;
+}
+
+.widget-mpris-title    { color: @wb-fg;    font-weight: bold; font-size: 13px; }
+.widget-mpris-subtitle { color: @wb-muted; font-size: 11px; }
+
+.widget-mpris > box > button {
+  background: alpha(@wb-bg, 0.6);
+  border: 1px solid alpha(@wb-accent, 0.22);
+  border-radius: 8px;
+  color: @wb-accent;
+  min-height: 32px;
+  min-width:  32px;
+  padding: 4px;
+}
+
+.widget-mpris > box > button:hover { background: alpha(@wb-accent, 0.2); }
+
+/* ── Scrollbar ────────────────────────────────────────── */
+scrollbar { background: transparent; }
+
+scrollbar slider {
+  background: alpha(@wb-accent, 0.3);
+  border-radius: 4px;
+  min-width: 4px;
+}
+
+scrollbar slider:hover { background: alpha(@wb-accent, 0.6); }

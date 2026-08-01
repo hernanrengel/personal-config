@@ -1,0 +1,48 @@
+@import url("/home/brosso3d/.cache/wal/colors-waybar.css");
+
+* {
+    font-family: 'JetBrainsMono Nerd Font Propo', 'CaskaydiaCove Nerd Font', monospace;
+    background-image: none;
+    transition: all 0.2s ease;
+}
+
+window {
+    background-color: alpha(@wb-bg, 0.88);
+}
+
+button {
+    background-color: alpha(@wb-bg, 0.85);
+    border: 1px solid alpha(@wb-accent, 0.2);
+    border-radius: 16px;
+    color: @wb-fg;
+    margin: 10px;
+    min-height: 120px;
+    min-width: 120px;
+    padding: 20px;
+    background-repeat: no-repeat;
+    background-position: center 30%;
+    background-size: 42px;
+}
+
+button:focus,
+button:active,
+button:hover {
+    background-color: alpha(@wb-bg, 0.95);
+    border-color: alpha(@wb-accent, 0.6);
+    color: @wb-accent;
+    outline: none;
+}
+
+#lock:hover     { border-color: alpha(@wb-accent,  0.7); color: @wb-accent; }
+#logout:hover   { border-color: alpha(@wb-accent2, 0.7); color: @wb-accent2; }
+#suspend:hover  { border-color: alpha(@wb-accent,  0.7); color: @wb-accent; }
+#hibernate:hover{ border-color: alpha(@wb-accent2, 0.7); color: @wb-accent2; }
+#reboot:hover   { border-color: alpha(@wb-accent,  0.7); color: @wb-accent; }
+#shutdown:hover { border-color: alpha(#f38ba8,     0.7); color: #f38ba8; }
+
+#lock     { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout   { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend  { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate{ background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot   { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }

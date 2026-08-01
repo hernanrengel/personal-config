@@ -1,0 +1,95 @@
+@import url("/home/brosso3d/.cache/wal/colors-wb.css");
+
+* {
+    font-family: 'Inter', 'JetBrainsMono Nerd Font Propo', monospace;
+    font-size: 14px;
+}
+
+window {
+    margin: 0;
+    padding: 12px;
+    /* Mismo "material isla" que la barra: gradiente vertical + highlight superior */
+    background-color: alpha(@wb-bg, 0.90);
+    background-image: linear-gradient(to bottom, alpha(@wb-surface, 0.92), alpha(@wb-bg, 0.97));
+    border-radius: 18px;
+    border: 1px solid alpha(@wb-accent, 0.45);
+    box-shadow: 0 8px 32px alpha(#000000, 0.55),
+                0 0 0 1px alpha(@wb-accent, 0.08),
+                inset 0 1px 0 alpha(#ffffff, 0.06);
+}
+
+#outer-box {
+    background-color: transparent;
+    padding: 4px;
+}
+
+#inner-box {
+    background-color: transparent;
+    margin-top: 4px;
+}
+
+#scroll {
+    background-color: transparent;
+    border: none;
+}
+
+#input {
+    margin: 4px 8px 10px 8px;
+    padding: 11px 16px;
+    background-color: alpha(@wb-bg, 0.6);
+    color: @wb-fg;
+    border-radius: 12px;
+    border: 1px solid alpha(@wb-accent, 0.3);
+    caret-color: @wb-accent;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    font-size: 15px;
+}
+
+#input:focus {
+    border-color: alpha(@wb-accent, 0.75);
+    background-color: alpha(@wb-bg, 0.75);
+    box-shadow: 0 0 0 2px alpha(@wb-accent, 0.12),
+                inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+#text {
+    color: @wb-fg;
+    margin: 0 4px;
+}
+
+#entry {
+    background-color: transparent;
+    margin: 2px 6px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+#entry:hover {
+    background-color: alpha(@wb-accent, 0.08);
+    border-color: alpha(@wb-accent, 0.15);
+}
+
+#entry:selected {
+    background: linear-gradient(
+        135deg,
+        alpha(@wb-accent, 0.22),
+        alpha(@wb-accent2, 0.18)
+    );
+    border: 1px solid alpha(@wb-accent, 0.55);
+    box-shadow: 0 2px 12px alpha(@wb-accent, 0.2),
+                inset 0 1px 0 alpha(#ffffff, 0.06);
+}
+
+#entry:selected #text {
+    color: @wb-accent;
+    font-weight: bold;
+}
+
+/* app icon */
+#entry image {
+    margin-right: 8px;
+    min-width: 28px;
+    min-height: 28px;
+}

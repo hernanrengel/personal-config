@@ -1,0 +1,213 @@
+// -*- mode: jsonc -*-
+{
+    // "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    "margin-top": 13,
+    "margin-right": 20,
+    "margin-left": 20,
+    // "width": 1280, // Waybar width
+
+    // ── Custom modules ──────────────────────────────────────
+    "custom/bluetooth": {
+        "exec": "~/.config/waybar/scripts/bluetooth.sh",
+        "interval": 5,
+        "return-type": "json",
+        "on-click": "~/.local/bin/bluetooth-popup.sh",
+        "on-click-right": "blueman-manager"
+    },
+    "custom/playerctl": {
+        "format": "{}",
+        "exec": "playerctl --ignore-player=mpv metadata --format '{{emoji(status)}} {{artist}} - {{title}}' 2>/dev/null || echo ' No Music'",
+        "max-length": 40,
+        "on-click": "playerctl --ignore-player=mpv play-pause",
+        "on-scroll-up": "playerctl --ignore-player=mpv next",
+        "on-scroll-down": "playerctl --ignore-player=mpv previous",
+        "interval": 2,
+        "return-type": "text"
+    },
+    "custom/monitor-toggle": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh --status",
+        "on-click": "/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh --toggle",
+        "interval": 2,
+        "tooltip": true
+    },
+    "custom/super-drag": {
+        "exec": "/home/brosso3d/.config/hypr/scripts/super-drag-status.sh",
+        "interval": 2,
+        "on-click": "/home/brosso3d/.config/hypr/scripts/toggle-super-drag.sh",
+        "tooltip": false,
+        "format": "{}"
+    },
+
+    // ── Hardware drawer handle (always-visible icon) ────────
+    "custom/hw-icon": {
+        "format": "󰓅",
+        "tooltip": false,
+        "on-click": "~/.local/bin/stats-popup.sh"
+    },
+
+    // ── Hardware stats drawer (collapses to icon, expands on hover) ──
+    "group/hardware": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 350,
+            "transition-left-to-right": false,
+            "click-to-reveal": false
+        },
+        "modules": [
+            "custom/hw-icon",
+            "memory",
+            "cpu",
+            "temperature",
+            "custom/gpu",
+            "custom/gpu-mode"
+        ]
+    },
+
+    // ── Bar layout ──────────────────────────────────────────
+    "modules-left": [
+        "clock",
+        "custom/playerctl"
+    ],
+    "modules-center": [
+        "hyprland/workspaces"
+    ],
+    "modules-right": [
+        "group/hardware",
+        "battery",
+        "custom/super-drag",
+        "custom/monitor-toggle",
+        "custom/kb-backlight",
+        "pulseaudio",
+        "custom/bluetooth",
+        "network",
+        "power-profiles-daemon"
+    ],
+
+    // ── Workspaces — named ──────────────────────────────────
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "persistent-workspaces": {
+            "*": 5, // 5 workspaces by default on every monitor
+            "HDMI-A-1": 3 // but only three on HDMI-A-1
+        }
+    },
+
+    // ── Clock — statement (big time + small date, Pango markup) ──
+    "clock": {
+        "format": "<span size='x-large'>{0:%H:%M}</span>  <span size='small'>{0:%a %d %b}</span>",
+        "tooltip-format": "<big>{:%A, %B %d, %Y}</big>\n<tt><small>{calendar}</small></tt>",
+        "on-click": "~/.local/bin/calendar-popup.sh"
+    },
+
+    "cpu": {
+        "format": "{usage}% 󰻠",
+        "tooltip": false,
+        "on-click": "~/.local/bin/stats-popup.sh"
+    },
+    "custom/gpu": {
+        "exec": "v=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null); case \"$v\" in ''|*[!0-9]*) echo '󰾲 off';; *) echo \"$v% 󰾲\";; esac",
+        "interval": 3,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "~/.local/bin/stats-popup.sh"
+    },
+    "custom/gpu-mode": {
+        "exec": "~/.config/waybar/scripts/gpu-mode.sh",
+        "interval": 5,
+        "return-type": "json",
+        "on-click": "~/.config/waybar/scripts/gpu-mode-cycle.sh",
+        "tooltip": true
+    },
+    "custom/kb-backlight": {
+        "exec": "~/.config/waybar/scripts/kb-backlight.sh",
+        "interval": 3,
+        "return-type": "json",
+        "on-click": "~/.config/waybar/scripts/kb-backlight-cycle.sh",
+        "tooltip": true
+    },
+    "memory": {
+        "interval": 3,
+        "format": "{percentage}% 󰍛",
+        "tooltip-format": "RAM {used:0.1f} GiB / {total:0.1f} GiB ({percentage}%)",
+        "on-click": "~/.local/bin/stats-popup.sh"
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+        "bat": "BAT0",
+        "adapter": "ADP1",
+        "states": {
+            "good": 95,
+            "warning": 35,
+            "critical": 25
+        },
+        "format": "{capacity}% {icon}",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% {icon}",
+        "format-plugged": "{capacity}% {icon}",
+        "on-click": "~/.local/bin/battery-popup.sh",
+        // Dynamic icons: charging variants + 0→100 discharge levels (Material Design)
+        "format-icons": {
+            "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
+            "default":  ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+        }
+    },
+    "power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "on-click": "asusctl profile next",
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+      }
+    },
+    "network": {
+        "format-wifi": "{essid} {icon}",
+        "format-ethernet": "{ipaddr}/{cidr} 󰈀",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ifname} via {gwaddr}",
+        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{ifname} (No IP) 󰤩",
+        "format-disconnected": "Disconnected 󰤮",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        // Dynamic icons: wifi signal strength 0→100 (Material Design)
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "on-click": "~/.local/bin/wofi-wifi-menu.sh"
+    },
+    "pulseaudio": {
+        "format": "{volume}% {icon}  {format_source}",
+        "format-muted": "󰝟 Muted  {format_source}",
+        "format-source": "{volume}% 󰍬",
+        "format-source-muted": "󰍭",
+        // Dynamic icons: volume level low→med→high (Material Design)
+        "format-icons": {
+            "headphones": "󰋋",
+            "handsfree": "󰋎",
+            "headset": "󰋎",
+            "phone": "󰏲",
+            "portable": "󰦧",
+            "car": "󰄋",
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "~/.local/bin/audio-popup.sh",
+        "on-click-right": "pavucontrol",
+        "on-scroll-up": "pamixer -i 5",
+        "on-scroll-down": "pamixer -d 5"
+    }
+}

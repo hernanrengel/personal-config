@@ -1,0 +1,115 @@
+@import url("/home/brosso3d/.cache/wal/colors-waybar.css");
+
+/*
+ * ─────────────────────────────────────────────────────────────
+ *  BRUTALIST / SWISS  ·  pywal · hard edges · offset shadows
+ * ─────────────────────────────────────────────────────────────
+ */
+
+* {
+    font-family: 'JetBrainsMono Nerd Font', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    min-height: 0;
+    transition: background-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+}
+
+window#waybar {
+    background-color: transparent;
+    color: @wb-fg;
+    min-height: 46px;
+}
+box, widget, separator { background-color: transparent; border: none; }
+window#waybar.hidden { opacity: 0.15; }
+button { border: none; background: transparent; }
+
+/* ── Blocks: thick border + hard offset shadow ──────────────── */
+#custom-playerctl,
+#memory, #cpu, #temperature, #custom-gpu, #custom-gpu-mode,
+#network, #pulseaudio, #battery, #power-profiles-daemon,
+#custom-bluetooth, #custom-super-drag, #custom-monitor-toggle,
+#custom-kb-backlight {
+    background-color: alpha(@wb-bg, 0.92);
+    color: @wb-fg;
+    border: 2px solid @wb-fg;
+    border-radius: 0;
+    box-shadow: 3px 3px 0 0 alpha(@wb-accent, 0.9);
+    padding: 0 11px;
+    margin: 0 5px 5px 5px;
+    font-weight: 700;
+}
+
+/* Hover — full invert */
+#custom-playerctl:hover,
+#memory:hover, #cpu:hover, #temperature:hover, #custom-gpu:hover,
+#custom-gpu-mode:hover, #network:hover, #pulseaudio:hover, #battery:hover,
+#custom-bluetooth:hover, #custom-super-drag:hover,
+#custom-monitor-toggle:hover, #custom-kb-backlight:hover {
+    background-color: @wb-accent;
+    color: @wb-bg;
+    box-shadow: 3px 3px 0 0 @wb-fg;
+}
+
+/* ── Clock — the giant statement block ──────────────────────── */
+#clock {
+    background-color: @wb-accent;
+    color: @wb-bg;
+    border: 2px solid @wb-fg;
+    border-radius: 0;
+    box-shadow: 4px 4px 0 0 alpha(@wb-fg, 0.9);
+    padding: 0 16px;
+    margin: 0 6px 5px 5px;
+}
+
+/* ── Workspaces — hard blocks ───────────────────────────────── */
+#workspaces {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+#workspaces button {
+    background-color: alpha(@wb-bg, 0.92);
+    color: @wb-fg;
+    border: 2px solid @wb-fg;
+    border-radius: 0;
+    box-shadow: 2px 2px 0 0 alpha(@wb-fg, 0.45);
+    margin: 0 3px 5px 3px;
+    padding: 0 11px;
+    font-weight: 700;
+    transition: background-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+}
+#workspaces button.active {
+    background-color: @wb-accent;
+    color: @wb-bg;
+    box-shadow: 3px 3px 0 0 alpha(@wb-accent, 0.9);
+}
+#workspaces button:not(.active):hover {
+    background-color: @wb-fg;
+    color: @wb-bg;
+    box-shadow: 2px 2px 0 0 @wb-accent;
+}
+
+/* ── States ─────────────────────────────────────────────────── */
+#battery.critical:not(.charging) {
+    background-color: @wb-urgent;
+    color: @wb-bg;
+    box-shadow: 3px 3px 0 0 @wb-fg;
+    animation: bru-blink 0.8s steps(1) infinite;
+}
+@keyframes bru-blink {
+    0%   { background-color: @wb-urgent; }
+    49%  { background-color: @wb-urgent; }
+    50%  { background-color: alpha(@wb-urgent, 0.4); }
+    100% { background-color: alpha(@wb-urgent, 0.4); }
+}
+#battery.charging  { box-shadow: 3px 3px 0 0 @wb-accent2; }
+#network.disconnected { background-color: @wb-urgent; color: @wb-bg; box-shadow: 3px 3px 0 0 @wb-fg; }
+#pulseaudio.muted { color: @wb-muted; box-shadow: 3px 3px 0 0 alpha(@wb-muted, 0.6); }
+#temperature.critical { background-color: @wb-urgent; color: @wb-bg; box-shadow: 3px 3px 0 0 @wb-fg; }
+
+#power-profiles-daemon.performance { box-shadow: 3px 3px 0 0 @wb-urgent; }
+#power-profiles-daemon.power-saver { box-shadow: 3px 3px 0 0 @wb-accent2; }
+#custom-gpu-mode.nvidia { box-shadow: 3px 3px 0 0 @wb-urgent; }
+#custom-gpu-mode.integrated { box-shadow: 3px 3px 0 0 @wb-accent2; }
+
+label:focus { background-color: transparent; }
