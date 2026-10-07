@@ -1,0 +1,11 @@
+@colbymchenry/codegraph
+@nestjs/cli
+corepack
+express-generator
+javascript-deobfuscator
+js-beautify
+npm
+opencode-ai
+playwright
+tailwindcss
+vercel

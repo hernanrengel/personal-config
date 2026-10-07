@@ -43,6 +43,20 @@ else
     fi
 fi
 
+# Export VS Code Extensions
+if command -v code &>/dev/null || command -v code-oss &>/dev/null; then
+    CMD="code-oss"
+    command -v code &>/dev/null && CMD="code"
+    $CMD --list-extensions 2>/dev/null > packages/vscode-extensions.txt
+    echo -e "  -> Exported VS Code extensions (${GREEN}$(wc -l < packages/vscode-extensions.txt)${NC} extensions)"
+fi
+
+# Export NPM global packages
+if command -v npm &>/dev/null; then
+    npm list -g --depth=0 | grep '├──' | awk '{print $2}' | awk -F'@' '{if ($1 == "") print "@"$2; else print $1}' > packages/npm-global.txt
+    echo -e "  -> Exported NPM global packages (${GREEN}$(wc -l < packages/npm-global.txt)${NC} packages)"
+fi
+
 # 3. Backup config files (~/.config)
 echo -e "${YELLOW}[3/8] Backing up ~/.config folders...${NC}"
 CONFIG_DIRS=(

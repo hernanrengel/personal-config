@@ -70,6 +70,32 @@ if [ -f packages/aur-packages.txt ]; then
     }
 fi
 
+# 4.5 Install NPM global packages
+if [ -f packages/npm-global.txt ] && command -v npm &>/dev/null; then
+    echo -e "${YELLOW}Installing global NPM packages...${NC}"
+    while read -r pkg; do
+        [ -z "$pkg" ] && continue
+        sudo npm install -g "$pkg" || echo -e "  -> ${RED}Failed to install NPM package: $pkg${NC}"
+    done < packages/npm-global.txt
+fi
+
+# 4.6 Install VS Code Extensions
+if [ -f packages/vscode-extensions.txt ]; then
+    echo -e "${YELLOW}Installing VS Code extensions...${NC}"
+    CMD=""
+    if command -v code &>/dev/null; then CMD="code"; fi
+    if command -v code-oss &>/dev/null; then CMD="code-oss"; fi
+    
+    if [ -n "$CMD" ]; then
+        while read -r ext; do
+            [ -z "$ext" ] && continue
+            $CMD --install-extension "$ext" --force || echo -e "  -> ${RED}Failed to install extension: $ext${NC}"
+        done < packages/vscode-extensions.txt
+    else
+        echo -e "${RED}Warning: VS Code not found, skipping extensions${NC}"
+    fi
+fi
+
 # Helper function to create safe symlinks (with backups)
 symlink_item() {
     local src="$1"
