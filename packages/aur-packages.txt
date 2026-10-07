@@ -3,6 +3,7 @@ android-studio
 antigravity
 antigravity-cli
 archlinux-tweak-tool-git
+aylurs-gtk-shell
 bibata-cursor-theme
 brave-bin
 cursor-bin
@@ -15,12 +16,16 @@ google-chrome
 insomnia
 jre-jetbrains
 keybase-bin
+lib32-mpg123
+lib32-openal
+libastal-meta
 mpvpaper
 ngrok
 papirus-folders
 paru
 paru-debug
 postman-bin
+python-pywal
 rofi-wifi-menu-git
 sddm-sugar-dark
 sddm-theme-sugar-candy-git

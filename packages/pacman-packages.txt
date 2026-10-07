@@ -7,6 +7,7 @@ ark
 asusctl
 aws-cli-v2
 awww
+aylurs-gtk-shell
 base
 base-devel
 bat
@@ -30,7 +31,6 @@ dkms
 docker-desktop
 dolphin
 dolphin-plugins
-dunst
 dust
 earlyoom
 easyeffects
@@ -76,6 +76,7 @@ lib32-mpg123
 lib32-nvidia-utils
 lib32-openal
 lib32-vulkan-intel
+libastal-meta
 libpulse
 libratbag
 libva-nvidia-driver
@@ -101,6 +102,7 @@ npm
 nvidia-open
 nwg-look
 obs-studio
+openai-codex
 openssh
 otf-font-awesome
 otf-geist-mono-nerd
@@ -122,6 +124,7 @@ pipewire-pulse
 polkit-kde-agent
 postman-bin
 power-profiles-daemon
+proton-vpn-gtk-app
 python-pip
 python-pywal
 qt5-wayland
@@ -185,6 +188,7 @@ yarn
 yay
 yazi
 ydotool
+yt-dlp
 zip
 zoom
 zoxide

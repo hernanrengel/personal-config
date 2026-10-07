@@ -3,42 +3,58 @@
 INTERNAL="eDP-1"
 WALLPAPER="$HOME/Pictures/Wallpapers/wallpapersden.com_astronaut-with-jellyfish_2560x1440.jpg"
 DELAY=1.5
+TOGGLE_SCRIPT="/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh"
 
-set_primary_monitor() {
-    EXTERNAL=$(hyprctl monitors -j | jq -r '.[] | select(.name != "'"$INTERNAL"'") | .name' | head -n 1)
+echo "Monitor manager started."
 
-    if [ -n "$EXTERNAL" ]; then
-        hyprctl keyword monitor "$EXTERNAL,preferred,auto,1"
-        hyprctl keyword monitor "$INTERNAL,disable"
-    else
-        hyprctl keyword monitor "$INTERNAL,preferred,auto,1"
-    fi
-}
-
-start_swww_once() {
-    if ! pgrep -x "swww-daemon" >/dev/null; then
-        swww-daemon &
-        for i in {1..20}; do
-            if swww query &>/dev/null; then break; fi
-            sleep 0.2
-        done
+start_awww_once() {
+    if ! pgrep -x "awww-daemon" >/dev/null; then
+        echo "Starting awww-daemon..."
+        awww-daemon &
+        sleep 0.8
     fi
 }
 
 apply_wallpaper() {
+    echo "Applying wallpaper: $WALLPAPER"
     sleep "$DELAY"
-    swww img "$WALLPAPER" --transition-type fade --transition-fps 60
+    awww img "$WALLPAPER" --transition-type fade --transition-fps 60
 }
 
 # --- Inicio ---
 sleep 2
-start_swww_once
-set_primary_monitor
+start_awww_once
 apply_wallpaper
 
-# Escuchar cambios de monitor
-hyprctl -j listen | jq -r 'select(.event == "monitoradded" or .event == "monitorremoved")' | while read -r _; do
-    sleep 1
-    set_primary_monitor
-    apply_wallpaper
+# Escuchar cambios de monitor usando socat apuntando al socket oficial de Hyprland
+while true; do
+    if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
+        SOCKET_PATH="$XDG_RUNTIME_DIR/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.socket2.sock"
+        echo "Connecting to Hyprland event socket at $SOCKET_PATH..."
+        if [ -S "$SOCKET_PATH" ]; then
+            socat -u "UNIX-CONNECT:$SOCKET_PATH" - | while read -r line; do
+                echo "Event: $line"
+                if [[ "$line" == "monitorremoved>>"* ]]; then
+                    echo "Monitor removal detected. Waiting 1s..."
+                    sleep 1
+                    # Asegurar que el monitor interno se reactive si no hay pantallas externas
+                    if [ -f "$TOGGLE_SCRIPT" ]; then
+                        echo "Running $TOGGLE_SCRIPT --ensure..."
+                        "$TOGGLE_SCRIPT" --ensure
+                    fi
+                    apply_wallpaper
+                elif [[ "$line" == "monitoradded>>"* ]]; then
+                    echo "Monitor addition detected. Reloading monitor layouts..."
+                    hyprctl reload
+                    sleep 1
+                    apply_wallpaper
+                fi
+            done
+        else
+            echo "Socket file $SOCKET_PATH not found or not a socket."
+        fi
+    else
+        echo "HYPRLAND_INSTANCE_SIGNATURE is not set."
+    fi
+    sleep 2
 done

@@ -3,7 +3,7 @@ set -euo pipefail
 
 INTERNAL="eDP-1"
 EXPLICIT_MODE="1920x1080@60"
-EXPLICIT_POS="0x0"
+EXPLICIT_POS="2560x0"
 EXPLICIT_SCALE="1"
 NOTIFY_BIN="$(command -v notify-send || true)"
 BRIGHT_BIN="$(command -v brightnessctl || true)"
@@ -21,7 +21,7 @@ monitors_json() {
 
 has_external_active() {
   monitors_json | jq --arg INTERNAL "$INTERNAL" '
-    [.[] | select(.name != $INTERNAL and (.disabled|not))] | length > 0
+    [.[] | select(.name != $INTERNAL and .name != "FALLBACK" and (.name | startswith("HEADLESS") | not) and (.disabled|not))] | length > 0
   '
 }
 
@@ -127,6 +127,16 @@ enable_internal() {
 }
 
 disable_internal() {
+  local ext
+  ext="$(has_external_active)"
+  if [[ "$ext" == "false" ]]; then
+    # Do not disable or fade out if there is no external monitor.
+    # systemd-logind will handle suspending the system.
+    # Fading to 0 here causes a black screen on resume because the lid open event
+    # is often consumed by the kernel for wake-up.
+    return 0
+  fi
+
   # Fade out first (to 0%), then disable the output
   fade_to 0
   hyprctl keyword monitor "${INTERNAL},disable" >/dev/null
@@ -160,25 +170,39 @@ status_json() {
 toggle() {
   local ext disabled
   ext="$(has_external_active)"
-
-  if [[ "$ext" == "false" ]]; then
-    [[ -n "$NOTIFY_BIN" ]] && "$NOTIFY_BIN" "Monitor toggle" "No external display detected. Nothing to do."
-    exit 0
-  fi
-
   disabled="$(internal_disabled)"
+
   if [[ "$disabled" == "true" ]]; then
     enable_internal
     [[ -n "$NOTIFY_BIN" ]] && "$NOTIFY_BIN" "Monitor toggle" "Internal display enabled (fade-in)."
   else
+    if [[ "$ext" == "false" ]]; then
+      [[ -n "$NOTIFY_BIN" ]] && "$NOTIFY_BIN" "Monitor toggle" "No external display detected. Cannot disable internal display."
+      exit 0
+    fi
     disable_internal
     [[ -n "$NOTIFY_BIN" ]] && "$NOTIFY_BIN" "Monitor toggle" "Internal display disabled (fade-out)."
   fi
   pkill -RTMIN+5 waybar || true
 }
 
+ensure_internal() {
+  local ext disabled
+  ext="$(has_external_active)"
+  disabled="$(internal_disabled)"
+
+  if [[ "$ext" == "false" && "$disabled" == "true" ]]; then
+    enable_internal
+    [[ -n "$NOTIFY_BIN" ]] && "$NOTIFY_BIN" "Monitor Toggle" "External monitor removed. Internal display enabled."
+    pkill -RTMIN+5 waybar || true
+  fi
+}
+
 case "${1:-}" in
   --toggle) toggle ;;
+  --ensure) ensure_internal ;;
+  --enable) enable_internal ;;
+  --disable) disable_internal ;;
   --status|"") status_json ;;
-  *) echo "Usage: $0 [--toggle|--status]"; exit 2 ;;
+  *) echo "Usage: $0 [--toggle|--ensure|--enable|--disable|--status]"; exit 2 ;;
 esac

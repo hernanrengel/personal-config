@@ -155,7 +155,6 @@ fi
 # Recolorea el logo de fastfetch al acento de la nueva paleta pywal
 "$HOME/.config/fastfetch/recolor-logo.sh" >/dev/null 2>&1 || true
 
-# waybar usa paleta NEUTRA estática — NO se recarga al cambiar wallpaper
-# (evita flicker de barra + reflow de ventanas cada hora).
-swaync-client --reload-css 2>/dev/null || true
+# Reiniciar AGS para forzar la carga de los nuevos colores pywal.
+hyprctl dispatch exec "ags quit; sleep 0.5; ags run" 2>/dev/null || true
 kitty @ --to unix:/tmp/kitty set-colors --all "$HOME/.cache/wal/colors-kitty.conf" 2>/dev/null || true

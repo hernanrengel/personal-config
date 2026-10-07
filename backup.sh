@@ -46,6 +46,7 @@ fi
 # 3. Backup config files (~/.config)
 echo -e "${YELLOW}[3/8] Backing up ~/.config folders...${NC}"
 CONFIG_DIRS=(
+    "ags"
     "alacritty"
     "cava"
     "fastfetch"
@@ -69,7 +70,12 @@ for dir in "${CONFIG_DIRS[@]}"; do
     if [ -d "$HOME/.config/$dir" ]; then
         echo -e "  -> Backing up ~/.config/$dir"
         rm -rf "dot_config/$dir"
-        cp -r "$HOME/.config/$dir" "dot_config/"
+        if [ "$dir" = "ags" ]; then
+            cp -r "$HOME/.config/ags" "dot_config/"
+            rm -rf "dot_config/ags/node_modules" "dot_config/ags/@girs"
+        else
+            cp -r "$HOME/.config/$dir" "dot_config/"
+        fi
     else
         echo -e "  -> ${YELLOW}Skipped ~/.config/$dir (Not found)${NC}"
     fi

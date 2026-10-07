@@ -35,6 +35,10 @@ This file provides system instructions, build/run commands, and development guid
 
 ## Guidelines for AI Assistants
 
+### 0. Communication & Behavior (CRITICAL)
+* **Keep it simple and direct:** Focus strictly on the user's specific request. Do not write long theoretical explanations, do not go in loops, and **never** suggest or run Git commands (commit/push) unless explicitly asked.
+* **Validate first:** Before making assumptions about desktop configuration rules, run verification commands (like `hyprctl configerrors` and checking the package version) to ensure syntax compatibility.
+
 ### 1. Modifying Configurations & Scripts
 * **Modularity:** Keep custom user scripts in `local_bin/` or `scripts/`. Avoid creating ad-hoc wrappers inside home configuration files.
 * **Backup Safety:** When adding new configuration folders to `~/.config/`, ensure they are added to `CONFIG_DIRS` in `backup.sh` and not skipped.
@@ -44,3 +48,16 @@ This file provides system instructions, build/run commands, and development guid
 ### 2. Code Style
 * **Shell Scripts:** Use Bash/POSIX shell standards. Include terminal colors (`GREEN`, `BLUE`, `YELLOW`, `RED`) for feedback. Use `set -euo pipefail` for robustness.
 * **Keybindings:** Document any new shortcuts inside the `### KEYBINDINGS ###` section of `dot_config/hypr/hyprland.conf` so the user can easily review them.
+
+### 3. Wine / Lutris / Game Window Rules
+* **Game Window Matching:** Always match game executables case-insensitively using character classes (e.g. `^([jJ][uU][vV][iI][oO](\.[eE][xX][eE])?|[hH][oO][nN](\.[eE][xX][eE])?|[wW][oO][wW]([cC]lassic)?|[dD][iI][aA][bB][lL][oO]|[oO][vV][eE][rR][wW][aA][tT][cC][hH]|[hH][eE][aA][rR][tT][hH][sS][tT][oO][nN][eE])(\.[eE][xX][eE])?$`) to avoid missing different capitalization/runtime class names of Wine/XWayland windows.
+* **Game Fullscreen Fixes:** Use the new flat match syntax (`windowrule = match:class <regex>, <effect> <val>`) with `fullscreen 1` and `border_size 0` to ensure games bypass the window manager's borders, Waybar/AGS, and lock the cursor. For example:
+  ```ini
+  windowrule = match:class ^(mygame)$, float 1
+  windowrule = match:class ^(mygame)$, size 2560 1080
+  windowrule = match:class ^(mygame)$, move 0 0
+  windowrule = match:class ^(mygame)$, fullscreen 1
+  windowrule = match:class ^(mygame)$, border_size 0
+  ```
+
+

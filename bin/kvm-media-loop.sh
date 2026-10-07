@@ -18,7 +18,7 @@ while true; do
         pw-link "REDRAGON Live Camera Audio:capture_FR" "kvm_virtual_mic_input:playback_FR" 2>/dev/null
 
         # Transmitir video copiando el stream MJPEG directamente sin decodificar (ahorra mucha CPU)
-        ffmpeg -loglevel warning -f v4l2 -input_format mjpeg -i "$PHYS_PATH" -codec:v copy -f v4l2 "$VIRTUAL_DEV"
+        ffmpeg -loglevel warning -use_wallclock_as_timestamps 1 -f v4l2 -input_format mjpeg -i "$PHYS_PATH" -codec:v copy -f v4l2 "$VIRTUAL_DEV"
 
         echo "Conexión terminada (dispositivo desconectado o error)."
     fi

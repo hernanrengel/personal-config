@@ -22,7 +22,10 @@
   "terminal.integrated.commandsToSkipShell": [
     "kilo-code.new.agentManagerOpen",
     "kilo-code.new.agentManager.showTerminal",
+    "kilo-code.new.agentManager.previousTerminal",
+    "kilo-code.new.agentManager.nextTerminal"
   ],
   "claudeCode.preferredLocation": "panel",
   "http.systemCertificatesNode": true,
+  "kilo-code.new.agentWorkStyle": "unset",
 }

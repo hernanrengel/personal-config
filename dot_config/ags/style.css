@@ -1,0 +1,1213 @@
+@import url("/home/brosso3d/.cache/wal/colors-wb.css");
+
+/* Semantic colors (Fixed alerts, regardless of wallpaper palette) */
+@define-color ok    #a6e3a1;
+@define-color warn  #f9e2af;
+@define-color crit  #f38ba8;
+@define-color cool  #94e2d5;
+
+* {
+  font-family: 'JetBrainsMono Nerd Font Propo', 'CaskaydiaCove Nerd Font', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  min-height: 0;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* ── Full-width Transparent Window Container ────────────── */
+window.BarWindow {
+  background: transparent;
+  margin: 0;
+  border: none;
+  box-shadow: none;
+}
+
+.bar-content-centered {
+  min-height: 44px;
+}
+
+/* ── Glassy Premium Flush Bar ── */
+.glassy-premium-bar {
+  background-color: alpha(@wb-bg, 0.35);
+  border: none;
+  border-bottom: 1px solid alpha(#ffffff, 0.12);
+  border-radius: 0;
+  min-height: 36px;
+  padding: 4px 20px;
+  margin: 0; /* Flush to the edges */
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.3),
+              inset 0 1px 1px alpha(#ffffff, 0.1);
+}
+
+
+.glassy-premium-bar:hover {
+  background-color: alpha(@wb-bg, 0.50);
+  border-color: alpha(@wb-accent, 0.45);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.55),
+              inset 0 1px 1px alpha(#ffffff, 0.25),
+              0 0 20px alpha(@wb-accent, 0.20);
+}
+
+/* Flat box styling inside the island */
+.music-flat-box {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+#island-divider {
+  background-color: transparent;
+  background-image: none;
+  border-left: 1px solid #ffffff;
+  border-right: none;
+  border-top: none;
+  border-bottom: none;
+  box-shadow: none;
+  min-width: 1px;
+  min-height: 16px;
+  margin: 0 -4px;
+}
+
+/* ── Tooltips (Frosted glass card with glow) ─────────────── */
+tooltip {
+  background-color: alpha(@wb-bg, 0.85);
+  background-image: linear-gradient(to bottom, alpha(@wb-surface, 0.80), alpha(@wb-bg, 0.90));
+  border: 1px solid alpha(@wb-accent, 0.45);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 alpha(#ffffff, 0.15);
+}
+
+tooltip label {
+  color: @wb-fg;
+  font-family: 'JetBrainsMono Nerd Font', monospace;
+  font-size: 11px;
+  padding: 6px 12px;
+}
+
+/* ── Individual Modules (Spacious padding inside the bar) ── */
+#clock, 
+#memory, 
+#cpu, 
+#temperature, 
+#custom-gpu,
+#custom-gpu-mode, 
+#custom-hw-icon, 
+#custom-playerctl, 
+#pulseaudio,
+#network, 
+#custom-bluetooth, 
+#power-profiles-daemon, 
+#battery,
+#custom-media-prev, 
+#custom-media-playpause, 
+#custom-media-next,
+#custom-monitor-toggle, 
+#custom-super-drag, 
+#custom-kb-backlight,
+#custom-notif, 
+#custom-power {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0 6px; /* Comfortable 6px spacing */
+  margin: 0;
+}
+
+#island-c {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ── Clock (The Anchor) ──────────────────────────────────── */
+#clock {
+  color: @wb-fg;
+  font-weight: 700;
+  font-size: 13.5px;
+  text-shadow: 0 0 4px alpha(@wb-fg, 0.3);
+}
+
+#clock:hover {
+  color: @wb-accent;
+  text-shadow: 0 0 10px alpha(@wb-accent, 0.85);
+}
+
+/* ── Dynamic Workspaces (Expanding Capsules) ─────────────── */
+#workspaces {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+#workspaces button {
+  background-color: alpha(@wb-fg, 0.08);
+  color: alpha(@wb-fg, 0.45);
+  border: 1px solid alpha(#ffffff, 0.04);
+  border-radius: 20px;
+  min-height: 0;      /* Force reset GTK default button height */
+  min-width: 0;
+  padding: 1px 5px;   /* Micro horizontal & vertical padding */
+  margin: 0 2px;      /* Micro margins */
+  font-size: 11px;
+  font-weight: bold;
+}
+
+#workspaces button:hover {
+  color: @wb-fg;
+  background-color: alpha(@wb-accent, 0.15);
+  border-color: alpha(@wb-accent, 0.45);
+  box-shadow: inset 0 1px 0 alpha(#ffffff, 0.1), 0 0 8px alpha(@wb-accent, 0.25);
+}
+
+/* Expanding active workspace style */
+#workspaces button.active {
+  color: @wb-fg;
+  background-image: linear-gradient(
+    to bottom, 
+    alpha(@wb-accent, 0.40), 
+    alpha(@wb-accent, 0.20)
+  );
+  border: 1px solid @wb-accent;
+  min-height: 0;      /* Force reset GTK default button height */
+  min-width: 0;
+  padding: 1px 10px;  /* Micro vertical padding, clean horizontal padding */
+  box-shadow: inset 0 1px 0 alpha(#ffffff, 0.18), 
+              0 0 14px alpha(@wb-accent, 0.55);
+  text-shadow: 0 0 6px alpha(@wb-fg, 0.7);
+}
+
+#workspaces button.urgent {
+  color: @crit;
+  border-color: @crit;
+  background-color: alpha(@crit, 0.25);
+  box-shadow: 0 0 12px alpha(@crit, 0.6);
+}
+
+/* Reset all padding/margin on button child elements to ensure padding control is 100% on the button wrapper */
+#workspaces button *,
+#workspaces button.active * {
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* ── Cava Music Visualizer ─────────────────────────────────── */
+#custom-cava {
+  color: @wb-accent;
+  font-size: 7px;
+  padding: 0 6px;
+  text-shadow: 0 0 6px alpha(@wb-accent, 0.45);
+  font-family: 'JetBrainsMono Nerd Font', monospace;
+}
+
+#custom-cava:hover {
+  color: @wb-accent2;
+  text-shadow: 0 0 10px alpha(@wb-accent2, 0.75);
+}
+
+/* ── Primary Interactive Accents ─────────────────────────── */
+#custom-media-playpause { color: @wb-accent; font-size: 13.5px; }
+#custom-hw-icon { color: @wb-accent; font-size: 13.5px; }
+#custom-notif { color: @wb-accent; font-size: 13.5px; }
+#custom-notif.unread {
+  color: @crit;
+  animation: notif-pulse 1.5s ease-in-out infinite alternate;
+}
+@keyframes notif-pulse {
+  from { text-shadow: 0 0 3px alpha(@crit, 0.3); }
+  to   { text-shadow: 0 0 12px alpha(@crit, 0.9); }
+}
+
+#custom-notif.dnd { color: @wb-muted; }
+
+/* ── Secondary Interactive Accents ───────────────────────── */
+#network                { color: @wb-accent2; }
+#custom-bluetooth       { color: @wb-accent2; }
+#custom-monitor-toggle  { color: @wb-accent2; }
+#custom-super-drag      { color: @wb-accent2; }
+#custom-kb-backlight    { color: @wb-accent2; }
+#custom-gpu-mode        { color: @wb-accent2; }
+
+/* Off States */
+#custom-super-drag.off, 
+#custom-monitor-toggle.single,
+#custom-kb-backlight.off { 
+  color: alpha(@wb-muted, 0.5); 
+}
+
+/* ── Neutral Stat Readings ────────────────────────────────── */
+#memory, #cpu, #temperature, #custom-gpu {
+  color: alpha(@wb-fg, 0.8);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+#pulseaudio { color: @wb-fg; }
+#power-profiles-daemon { color: @wb-fg; }
+#battery { color: @wb-fg; }
+#custom-playerctl { color: alpha(@wb-fg, 0.7); font-style: italic; font-size: 11px; }
+
+/* Power profile semantic styles */
+#power-profiles-daemon.performance { color: @crit; }
+#power-profiles-daemon.power-saver { color: @cool; }
+#custom-gpu-mode.nvidia { color: @ok; }
+#custom-gpu-mode.integrated { color: @wb-accent2; }
+
+#battery.critical:not(.charging) {
+  color: @crit;
+  animation: battery-blink 1s ease-in-out infinite alternate;
+}
+@keyframes battery-blink {
+  from { text-shadow: 0 0 3px alpha(@crit, 0.3); }
+  to   { text-shadow: 0 0 12px alpha(@crit, 0.85); }
+}
+#battery.charging { color: @ok; }
+#network.disconnected { color: @crit; }
+#pulseaudio.muted { color: @wb-muted; }
+#temperature.critical { color: @crit; }
+
+/* ── Navigation / Media buttons ────────────────────────── */
+#custom-media-prev, 
+#custom-media-next { 
+  color: alpha(@wb-fg, 0.4); 
+  font-size: 12px; 
+}
+#custom-media-prev:hover, 
+#custom-media-next:hover { 
+  color: @wb-accent; 
+  text-shadow: 0 0 8px alpha(@wb-accent, 0.75); 
+}
+
+/* Power Button (Destructive red neon) */
+#custom-power {
+  color: @crit;
+  font-size: 13.5px;
+  padding-right: 4px;
+}
+#custom-power:hover {
+  color: #ff5577;
+  text-shadow: 0 0 15px alpha(#ff5577, 0.95);
+}
+
+/* ── Individual Hover Glow Effects ───────────────────────── */
+#custom-media-playpause:hover, 
+#custom-hw-icon:hover,
+#custom-notif:hover, 
+#memory:hover, 
+#cpu:hover, 
+#temperature:hover,
+#custom-gpu:hover, 
+#pulseaudio:hover, 
+#power-profiles-daemon:hover,
+#battery:hover, 
+#custom-playerctl:hover {
+  text-shadow: 0 0 10px alpha(@wb-accent, 0.8);
+  color: @wb-fg;
+}
+
+#network:hover, 
+#custom-bluetooth:hover, 
+#custom-gpu-mode:hover,
+#custom-monitor-toggle:hover, 
+#custom-super-drag:hover, 
+#custom-kb-backlight:hover {
+  text-shadow: 0 0 10px alpha(@wb-accent2, 0.8);
+  color: @wb-fg;
+}
+
+/* ── Centered Dashboards Popups ──────────────────────────── */
+window.HardwareDashboard,
+window.CalendarDashboard,
+window.AudioDashboard,
+window.ConnectivityDashboard,
+window.BatteryDashboard {
+  background: transparent;
+}
+
+.dashboard-card,
+.calendar-card,
+.audio-card,
+.conn-card,
+.battery-card {
+  background-color: alpha(@wb-bg, 0.35);
+  border: 1px solid alpha(#ffffff, 0.12);
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 0px;
+  min-width: 320px;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.3),
+              inset 0 1px 1px alpha(#ffffff, 0.1);
+}
+
+.dashboard-header {
+  margin-bottom: 4px;
+}
+
+.dashboard-title-icon {
+  color: @wb-accent;
+  font-size: 18px;
+  text-shadow: 0 0 8px alpha(@wb-accent, 0.6);
+}
+
+.dashboard-title {
+  color: @wb-fg;
+  font-size: 14.5px;
+  font-weight: 700;
+  text-shadow: 0 0 4px alpha(@wb-fg, 0.2);
+}
+
+.dashboard-close {
+  color: alpha(@wb-fg, 0.4);
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  padding: 4px;
+  font-size: 14px;
+}
+
+.dashboard-close:hover {
+  color: @crit;
+  background-color: alpha(@crit, 0.15);
+  text-shadow: 0 0 8px alpha(@crit, 0.6);
+}
+
+.dashboard-separator {
+  background-color: alpha(@wb-fg, 0.08);
+  min-height: 1px;
+  margin: 8px 0;
+}
+
+/* Stats inside Dashboard */
+.stat-row {
+  padding: 6px 0;
+}
+
+.stat-icon {
+  color: @wb-accent2;
+  font-size: 20px;
+  min-width: 28px;
+  text-shadow: 0 0 6px alpha(@wb-accent2, 0.45);
+}
+
+.stat-name {
+  color: alpha(@wb-fg, 0.7);
+  font-size: 11.5px;
+}
+
+.stat-value {
+  color: @wb-fg;
+  font-size: 12px;
+  font-weight: 700;
+  font-feature-settings: "tnum";
+}
+
+/* Style the LevelBar progress track and bar */
+.stat-bar {
+  margin-top: 4px;
+}
+
+.stat-bar trough {
+  background-color: alpha(@wb-fg, 0.08);
+  border-radius: 6px;
+  min-height: 8px;
+}
+
+.stat-bar block {
+  background-color: @wb-accent;
+  border-radius: 6px;
+  min-height: 8px;
+  box-shadow: 0 0 8px alpha(@wb-accent, 0.4);
+}
+
+/* Style the action buttons */
+.action-btn {
+  background-color: alpha(@wb-fg, 0.06);
+  color: alpha(@wb-fg, 0.85);
+  border: 1px solid alpha(#ffffff, 0.03);
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.action-btn:hover {
+  color: @wb-fg;
+  background-color: alpha(@wb-accent2, 0.15);
+  border-color: alpha(@wb-accent2, 0.45);
+  box-shadow: 0 0 12px alpha(@wb-accent2, 0.3);
+}
+
+.action-btn label {
+  font-size: 11.5px;
+}
+
+/* Calendar Card clock details */
+.calendar-large-time {
+  color: @wb-accent;
+  font-size: 32px;
+  font-weight: 800;
+  text-shadow: 0 0 12px alpha(@wb-accent, 0.55);
+}
+
+.calendar-full-date {
+  color: alpha(@wb-fg, 0.75);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.calendar-separator {
+  background-color: alpha(@wb-fg, 0.08);
+  min-height: 1px;
+  margin: 8px 0;
+}
+
+/* Style the native GTK Calendar widget */
+.calendar-widget {
+  background-color: transparent;
+  color: @wb-fg;
+  border: none;
+}
+
+.calendar-widget:selected {
+  background-color: @wb-accent;
+  color: @wb-bg;
+  border-radius: 6px;
+}
+
+.calendar-widget header {
+  background-color: transparent;
+  color: @wb-fg;
+}
+
+.calendar-widget button {
+  background: transparent;
+  border: none;
+  color: alpha(@wb-fg, 0.7);
+  border-radius: 4px;
+}
+
+.calendar-widget button:hover {
+  color: @wb-accent;
+  background-color: alpha(@wb-accent, 0.15);
+}
+
+.calendar-widget label {
+  color: @wb-fg;
+}
+
+.calendar-widget .highlight {
+  color: @wb-accent2;
+  font-weight: bold;
+}
+
+.calendar-vertical-separator {
+  background-color: alpha(@wb-fg, 0.08);
+  min-width: 1px;
+  margin: 0 8px;
+}
+
+.agenda-scroll {
+  background-color: transparent;
+  padding: 4px;
+}
+
+.agenda-day-header {
+  color: @wb-accent2;
+  font-weight: 800;
+  font-size: 11px;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+
+.agenda-event-item {
+  background-color: alpha(@wb-fg, 0.03);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border-left: 3px solid @wb-accent;
+}
+
+.agenda-event-dot {
+  color: @wb-accent;
+  font-size: 14px;
+  margin-top: -2px;
+}
+
+.agenda-event-time {
+  color: @wb-accent;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.agenda-event-summary {
+  color: @wb-fg;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.agenda-event-link {
+  background-color: alpha(@wb-accent, 0.1);
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-top: 4px;
+  color: @wb-accent;
+  border: none;
+}
+
+.agenda-event-link:hover {
+  background-color: alpha(@wb-accent, 0.2);
+  color: @wb-fg;
+}
+
+.refresh-btn {
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: alpha(@wb-fg, 0.6);
+}
+
+.refresh-btn:hover {
+  color: @wb-accent;
+  background-color: alpha(@wb-accent, 0.15);
+}
+
+
+/* Audio Card specific controls */
+.section-title {
+  color: alpha(@wb-fg, 0.5);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.mute-btn {
+  background-color: alpha(@wb-fg, 0.06);
+  border: 1px solid alpha(#ffffff, 0.03);
+  color: @wb-fg;
+  border-radius: 12px;
+  padding: 6px 12px;
+  min-width: 44px;
+}
+
+.mute-btn:hover {
+  background-color: alpha(@wb-accent, 0.15);
+  border-color: alpha(@wb-accent, 0.4);
+  color: @wb-accent;
+}
+
+.mute-btn.muted {
+  background-color: alpha(@crit, 0.12);
+  border-color: alpha(@crit, 0.35);
+  color: @crit;
+}
+
+.mute-btn.muted:hover {
+  background-color: alpha(@crit, 0.22);
+}
+
+.vol-slider trough {
+  background-color: alpha(@wb-fg, 0.08);
+  border-radius: 6px;
+  min-height: 8px;
+}
+
+.vol-slider highlight {
+  background: linear-gradient(90deg, @wb-accent, @wb-accent2);
+  border-radius: 6px;
+  min-height: 8px;
+}
+
+.vol-slider slider {
+  background-color: @wb-fg;
+  border-radius: 50%;
+  min-height: 14px;
+  min-width: 14px;
+  border: none;
+  box-shadow: 0 0 6px alpha(@wb-accent, 0.4);
+}
+
+.vol-slider slider:hover {
+  background-color: @wb-accent;
+  box-shadow: 0 0 10px alpha(@wb-accent, 0.8);
+}
+
+.device-list {
+  background-color: alpha(@wb-fg, 0.04);
+  border-radius: 12px;
+  padding: 6px;
+  margin-top: 6px;
+}
+
+.device-btn {
+  background: transparent;
+  color: alpha(@wb-fg, 0.7);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.device-btn label {
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.device-btn:hover {
+  background-color: alpha(@wb-accent, 0.08);
+  color: @wb-accent;
+}
+
+.device-btn.active {
+  background-color: alpha(@wb-accent, 0.14);
+  color: @wb-fg;
+  border: 1px solid alpha(@wb-accent, 0.3);
+  font-weight: 700;
+}
+
+/* Connectivity Dashboard Card */
+.conn-section {
+  padding: 4px 0;
+}
+
+.toggle-btn {
+  background-color: alpha(@wb-fg, 0.08);
+  color: alpha(@wb-fg, 0.6);
+  border: 1px solid alpha(#ffffff, 0.04);
+  border-radius: 12px;
+  padding: 4px 14px;
+}
+
+.toggle-btn:hover {
+  background-color: alpha(@wb-fg, 0.12);
+  color: @wb-fg;
+}
+
+.toggle-btn.active {
+  background-color: @wb-accent;
+  color: @wb-bg;
+  border-color: @wb-accent;
+  box-shadow: 0 0 10px alpha(@wb-accent, 0.5);
+  font-weight: 700;
+}
+
+.active-connection {
+  background-color: alpha(@wb-accent, 0.08);
+  border: 1px solid alpha(@wb-accent, 0.2);
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 4px;
+}
+
+.conn-icon.connected {
+  color: @wb-accent;
+  font-size: 20px;
+  text-shadow: 0 0 8px alpha(@wb-accent, 0.5);
+}
+
+.conn-name.connected {
+  font-weight: bold;
+  color: @wb-fg;
+}
+
+.conn-status {
+  font-size: 11px;
+  color: alpha(@wb-fg, 0.5);
+}
+
+/* Battery Dashboard Card */
+.battery-large-info {
+  margin: 6px 0;
+}
+
+.battery-large-pct {
+  font-size: 34px;
+  font-weight: 800;
+  color: @wb-accent;
+  text-shadow: 0 0 12px alpha(@wb-accent, 0.55);
+}
+
+.battery-large-pct.warn {
+  color: @warn;
+  text-shadow: 0 0 12px alpha(@warn, 0.55);
+}
+
+.battery-large-pct.crit {
+  color: @crit;
+  text-shadow: 0 0 12px alpha(@crit, 0.55);
+}
+
+.battery-large-pct.charging {
+  color: @ok;
+  text-shadow: 0 0 12px alpha(@ok, 0.55);
+}
+
+.battery-status-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: @wb-fg;
+}
+
+.battery-time-text {
+  font-size: 11px;
+  color: alpha(@wb-fg, 0.65);
+}
+
+.battery-bar trough {
+  background-color: alpha(@wb-fg, 0.08);
+  border-radius: 6px;
+  min-height: 8px;
+}
+
+.battery-bar block {
+  background-color: @wb-accent;
+  border-radius: 6px;
+  min-height: 8px;
+  box-shadow: 0 0 8px alpha(@wb-accent, 0.45);
+}
+
+.battery-bar.warn block {
+  background-color: @warn;
+  box-shadow: 0 0 8px alpha(@warn, 0.45);
+}
+
+.battery-bar.crit block {
+  background-color: @crit;
+  box-shadow: 0 0 8px alpha(@crit, 0.45);
+}
+
+.battery-bar.charging block {
+  background-color: @ok;
+  box-shadow: 0 0 8px alpha(@ok, 0.45);
+}
+
+.detail-row {
+  padding: 2px 0;
+}
+
+.detail-key {
+  color: alpha(@wb-fg, 0.5);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.detail-val {
+  color: @wb-fg;
+  font-size: 11.5px;
+  font-weight: 700;
+  font-feature-settings: "tnum";
+}
+
+.detail-val.good { color: @ok; }
+.detail-val.warn { color: @warn; }
+.detail-val.crit { color: @crit; }
+
+/* ── Overlay styles for Launcher, Power Menu & Notif Center ────────────── */
+window.AppLauncherWindow,
+window.PowerMenuWindow,
+window.NotificationCenterWindow {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.app-launcher-overlay,
+.power-menu-overlay,
+.notif-center-overlay {
+  background: transparent;
+}
+
+/* ── App Launcher Card ────────────── */
+.app-launcher-card {
+  background-color: alpha(@wb-bg, 0.50);
+  background-image: linear-gradient(to bottom, alpha(@wb-surface, 0.40), alpha(@wb-bg, 0.60));
+  border: 1px solid alpha(@wb-accent, 0.35);
+  border-radius: 20px;
+  padding: 20px;
+  min-width: 450px;
+  box-shadow: none;
+}
+
+.search-box {
+  background-color: alpha(@wb-fg, 0.05);
+  border: 1px solid alpha(@wb-fg, 0.08);
+  border-radius: 12px;
+  padding: 8px 14px;
+}
+
+.search-icon {
+  color: @wb-accent;
+  font-size: 18px;
+  margin-right: 4px;
+}
+
+.search-entry {
+  color: @wb-fg;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+}
+
+.apps-list-scroll {
+  min-height: 380px;
+}
+
+.app-item-btn {
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin: 2px 0;
+}
+
+.app-item-btn:hover {
+  background-color: alpha(@wb-accent, 0.15);
+}
+
+.app-icon {
+  font-size: 24px;
+}
+
+.app-name {
+  color: @wb-fg;
+  font-weight: 700;
+  font-size: 13.5px;
+}
+
+.app-description {
+  color: alpha(@wb-fg, 0.55);
+  font-size: 11px;
+}
+
+/* ── Power Menu Card ────────────── */
+.power-menu-card {
+  background-color: alpha(@wb-bg, 0.60);
+  background-image: linear-gradient(to bottom, alpha(@wb-surface, 0.40), alpha(@wb-bg, 0.70));
+  border: 1px solid alpha(@wb-accent, 0.45);
+  border-radius: 24px;
+  padding: 24px;
+  min-width: 550px;
+  box-shadow: none;
+}
+
+.power-menu-title-icon {
+  color: @crit;
+  font-size: 20px;
+  text-shadow: 0 0 8px alpha(@crit, 0.6);
+}
+
+.power-menu-title {
+  color: @wb-fg;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.power-btn {
+  background-color: alpha(@wb-fg, 0.05);
+  border: 1px solid alpha(#ffffff, 0.04);
+  border-radius: 16px;
+  padding: 18px;
+  min-width: 80px;
+}
+
+.power-btn:hover {
+  background-color: alpha(@wb-accent, 0.15);
+  border-color: alpha(@wb-accent, 0.45);
+  box-shadow: 0 0 16px alpha(@wb-accent, 0.2);
+}
+
+.power-btn.shutdown:hover {
+  background-color: alpha(@crit, 0.2);
+  border-color: @crit;
+  box-shadow: 0 0 16px alpha(@crit, 0.3);
+}
+
+.power-icon {
+  font-size: 28px;
+  color: @wb-fg;
+}
+
+.power-btn:hover .power-icon {
+  color: @wb-accent;
+}
+
+.power-btn.shutdown:hover .power-icon {
+  color: @crit;
+}
+
+.power-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: alpha(@wb-fg, 0.7);
+}
+
+/* ── Notification Popups ────────────── */
+window.NotificationPopupsWindow {
+  background: transparent;
+  margin-top: 52px;
+  margin-right: 12px;
+}
+
+.notification-popups-box {
+  padding: 8px;
+}
+
+.notification-popup-card {
+  background-color: alpha(@wb-bg, 0.55);
+  background-image: linear-gradient(to bottom, alpha(@wb-surface, 0.45), alpha(@wb-bg, 0.65));
+  border: 1px solid alpha(@wb-accent, 0.35);
+  border-radius: 16px;
+  padding: 14px;
+  min-width: 320px;
+  box-shadow: none;
+}
+
+.notif-header {
+  margin-bottom: 2px;
+}
+
+.notif-app-icon {
+  font-size: 16px;
+}
+
+.notif-app-name {
+  color: alpha(@wb-fg, 0.7);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.notif-close-btn {
+  color: alpha(@wb-fg, 0.4);
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.notif-close-btn:hover {
+  color: @crit;
+}
+
+.notif-separator {
+  background-color: alpha(@wb-fg, 0.06);
+  min-height: 1px;
+  margin: 6px 0;
+}
+
+.notif-summary {
+  color: @wb-fg;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.notif-body {
+  color: alpha(@wb-fg, 0.75);
+  font-size: 11.5px;
+  margin-top: 2px;
+}
+
+.notif-action-btn {
+  background-color: alpha(@wb-fg, 0.06);
+  border: 1px solid alpha(#ffffff, 0.04);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 11px;
+}
+
+.notif-action-btn:hover {
+  background-color: alpha(@wb-accent, 0.15);
+  border-color: @wb-accent;
+}
+
+/* ── Notification Center ────────────── */
+window.NotificationCenter {
+  background: transparent;
+  margin-top: 52px;
+}
+
+.notif-center-card {
+  background-color: alpha(@wb-bg, 0.40);
+  background-image: linear-gradient(to bottom, alpha(@wb-surface, 0.30), alpha(@wb-bg, 0.50));
+  border: 1px solid alpha(@wb-accent, 0.28);
+  border-radius: 20px;
+  padding: 20px;
+  min-width: 360px;
+  box-shadow: none;
+}
+
+.notif-center-list-scroll {
+  min-height: 400px;
+}
+
+.notif-center-item {
+  background-color: alpha(@wb-fg, 0.04);
+  border: 1px solid alpha(#ffffff, 0.03);
+  border-radius: 12px;
+  padding: 10px;
+  margin: 4px 0;
+}
+
+.notif-center-app {
+  color: alpha(@wb-fg, 0.6);
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.notif-center-dismiss-btn {
+  color: alpha(@wb-fg, 0.4);
+  background: transparent;
+  border: none;
+}
+
+.notif-center-dismiss-btn:hover {
+  color: @crit;
+}
+
+.notif-center-summary {
+  color: @wb-fg;
+  font-weight: 700;
+  font-size: 12.5px;
+}
+
+.notif-center-body {
+  color: alpha(@wb-fg, 0.7);
+  font-size: 11px;
+}
+
+.dnd-btn,
+.clear-all-btn {
+  background-color: alpha(@wb-fg, 0.05);
+  border: 1px solid alpha(#ffffff, 0.04);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+.dnd-btn:hover,
+.clear-all-btn:hover {
+  background-color: alpha(@wb-accent, 0.15);
+  border-color: @wb-accent;
+}
+
+.dnd-btn.active {
+  background-color: alpha(@warn, 0.15);
+  border-color: @warn;
+  color: @warn;
+}
+
+/* ── OSD ────────────── */
+window#osd {
+  background: transparent;
+}
+
+.osd-container {
+  background: rgba(17, 17, 27, 0.8);
+  border-radius: 100px;
+  padding: 12px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.osd-icon {
+  font-size: 24px;
+  color: @wb-fg;
+}
+
+.osd-progress {
+  min-height: 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.osd-progress trough {
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  min-height: 8px;
+}
+
+.osd-progress block {
+  border-radius: 8px;
+  background: @wb-accent;
+  min-height: 8px;
+  box-shadow: 0 0 4px @wb-accent;
+}
+
+/* Control Center */
+.ControlCenterWindow {
+    background-color: transparent;
+}
+.control-center-box {
+    background-color: alpha(@wb-bg, 0.90);
+    border: 1px solid alpha(@wb-accent, 0.45);
+    border-radius: 18px;
+    padding: 16px;
+    min-width: 320px;
+    box-shadow: 0 8px 32px alpha(#000000, 0.55);
+}
+.cc-btn {
+    background-color: alpha(@wb-surface, 0.6);
+    border-radius: 14px;
+    padding: 12px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+.cc-btn.active {
+    background-color: alpha(@wb-accent, 0.2);
+    border-color: alpha(@wb-accent, 0.6);
+    color: @wb-accent;
+}
+.cc-sliders {
+    background-color: alpha(@wb-surface, 0.4);
+    border-radius: 14px;
+    padding: 12px;
+}
+.vol-slider trough {
+    background-color: alpha(@wb-fg, 0.1);
+    border-radius: 8px;
+    min-height: 8px;
+}
+.vol-slider highlight {
+    background-color: @wb-accent;
+    border-radius: 8px;
+}
+
+/* Control Center Media Player */
+.cc-media-player {
+    background-color: alpha(@wb-surface, 0.4);
+    border-radius: 14px;
+    padding: 12px;
+}
+.media-cover {
+    min-width: 64px;
+    min-height: 64px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    background-color: alpha(@wb-bg, 0.5);
+}
+.media-title {
+    font-weight: bold;
+    color: @wb-fg;
+}
+.media-artist {
+    font-size: 11px;
+    color: alpha(@wb-fg, 0.7);
+}
+.media-controls button {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    font-size: 18px;
+    padding: 4px;
+    color: @wb-fg;
+}
+.media-controls button:hover {
+    color: @wb-accent;
+}
