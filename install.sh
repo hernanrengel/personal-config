@@ -252,5 +252,16 @@ if [ "$CURRENT_SHELL" != "$ZSH_PATH" ]; then
     sudo chsh -s "$ZSH_PATH" "$USER"
 fi
 
+# 11. Enable System Services
+echo -e "${YELLOW}Enabling required system services...${NC}"
+SERVICES_TO_ENABLE=("bluetooth" "docker" "supergfxd" "asusd")
+
+for service in "${SERVICES_TO_ENABLE[@]}"; do
+    if systemctl list-unit-files | grep -q "^${service}.service"; then
+        sudo systemctl enable --now "$service" 2>/dev/null || true
+        echo -e "  -> Enabled $service"
+    fi
+done
+
 echo -e "\n${GREEN}=== Restore Complete! ===${NC}"
 echo -e "Please log out and log back in (or reboot) for all changes, the shell, and Hyprland variables to take effect."

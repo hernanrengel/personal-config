@@ -9,7 +9,6 @@ brave-bin
 cursor-bin
 datagrip
 docker-desktop
-envycontrol
 epson-inkjet-printer-escpr
 flutter-bin
 google-chrome
@@ -27,10 +26,12 @@ paru-debug
 postman-bin
 python-pywal
 rofi-wifi-menu-git
+rog-control-center
 sddm-sugar-dark
 sddm-theme-sugar-candy-git
 slack-desktop
 sublime-text-4
+supergfxctl
 ttf-all-the-icons
 vysor-bin
 windsurf

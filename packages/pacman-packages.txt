@@ -1,4 +1,5 @@
 1password-cli
+amd-ucode
 android-studio
 antigravity
 antigravity-cli
@@ -35,7 +36,6 @@ dust
 earlyoom
 easyeffects
 efibootmgr
-envycontrol
 epson-inkjet-printer-escpr
 eza
 fastfetch
@@ -57,14 +57,13 @@ htop
 hyprland
 hyprpicker
 insomnia
-intel-ucode
 inter-font
 iw
 iwd
 jq
-jre-jetbrains
 jre17-openjdk
 jre21-openjdk
+jre-jetbrains
 kdegraphics-thumbnailers
 keybase-bin
 kimageformats
@@ -72,10 +71,11 @@ kitty
 lazygit
 less
 lib32-gnutls
+lib32-mesa
 lib32-mpg123
 lib32-nvidia-utils
 lib32-openal
-lib32-vulkan-intel
+lib32-vulkan-radeon
 libastal-meta
 libpulse
 libratbag
@@ -86,12 +86,13 @@ linux-headers
 luajit
 lutris
 ly
+mesa
 mitmproxy
 mplayer
 mpvpaper
 nano
-network-manager-applet
 networkmanager
+network-manager-applet
 networkmanager-dmenu
 ngrok
 nm-connection-editor
@@ -158,7 +159,7 @@ uwsm
 v4l2loopback-dkms
 vim
 vlc
-vulkan-intel
+vulkan-radeon
 vulkan-tools
 vysor-bin
 waybar
@@ -182,6 +183,7 @@ xdg-desktop-portal-hyprland
 xdg-desktop-portal-wlr
 xdg-utils
 xdotool
+xf86-video-amdgpu
 xorg-server
 xorg-xinit
 yarn
