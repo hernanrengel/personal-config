@@ -28,7 +28,7 @@ echo -e "${YELLOW}Please enter your password for administrative privileges:${NC}
 sudo -v
 
 # Keep-alive: update existing sudo time stamp until script has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; 2>/dev/null; } &
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 # 2. Check and install yay (AUR Helper)
 if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
