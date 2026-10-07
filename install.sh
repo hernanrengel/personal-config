@@ -75,7 +75,7 @@ if [ -f packages/npm-global.txt ] && command -v npm &>/dev/null; then
     echo -e "${YELLOW}Installing global NPM packages...${NC}"
     while read -r pkg; do
         [ -z "$pkg" ] && continue
-        sudo npm install -g "$pkg" || echo -e "  -> ${RED}Failed to install NPM package: $pkg${NC}"
+        npm install -g "$pkg" || echo -e "  -> ${RED}Failed to install NPM package: $pkg${NC}"
     done < packages/npm-global.txt
 fi
 
