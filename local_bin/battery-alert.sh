@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-CAPACITY=$(cat /sys/class/power_supply/BAT0/capacity)
-STATUS=$(cat /sys/class/power_supply/BAT0/status)
+# BAT0 en la laptop vieja, BAT1 en la G14: usar la primera batería que exista
+BAT=$(ls -d /sys/class/power_supply/BAT* 2>/dev/null | head -n1)
+[ -z "$BAT" ] && exit 0
+CAPACITY=$(cat "$BAT/capacity")
+STATUS=$(cat "$BAT/status")
 
 [[ "$STATUS" == "Charging" || "$STATUS" == "Full" ]] && exit 0
 

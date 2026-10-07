@@ -1,0 +1,23 @@
+[General]
+# Copia del wallpaper actual, la escribe local_bin/random-wallpaper.sh
+Background="/var/cache/sddm-wallpaper/current.jpg"
+ScaleImageCropped=true
+ScreenWidth=2880
+ScreenHeight=1800
+Font="Inter"
+Locale="es_BO"
+HourFormat="HH:mm"
+DateFormat="dddd, d 'de' MMMM"
+HeaderText="Bienvenido"
+ForceLastUser=true
+ForcePasswordFocus=true
+TranslatePlaceholderUsername="Usuario"
+TranslatePlaceholderPassword="Contraseña"
+TranslateShowPassword="Mostrar contraseña"
+TranslateLogin="Entrar"
+TranslateLoginFailedWarning="Contraseña incorrecta"
+TranslateCapslockWarning="Bloq Mayús activado"
+TranslateSession="Sesión"
+TranslateSuspend="Suspender"
+TranslateReboot="Reiniciar"
+TranslateShutdown="Apagar"

@@ -32,7 +32,7 @@ export function showOSD() {
 }
 
 export function updateBrightness() {
-    execAsync(["bash", "-c", "brightnessctl -m 2>/dev/null"])
+    execAsync(["bash", "-c", "brightnessctl -d 'amdgpu_bl*' -m 2>/dev/null"])
         .then(out => {
             const parts = out.split(",")
             if (parts.length >= 4) {

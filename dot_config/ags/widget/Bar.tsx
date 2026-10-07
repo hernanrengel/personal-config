@@ -162,10 +162,19 @@ function cleanSourceName(name: string | null, desc: string | null): string {
     return (desc || name || "Unknown Source").substring(0, 45)
 }
 
+// Battery sysfs dir: BAT0 on the old laptop, BAT1 on the G14 — detect the first BAT*
+const BAT_DIR = (() => {
+    for (const name of ["BAT0", "BAT1", "BAT2"]) {
+        const dir = `/sys/class/power_supply/${name}`
+        if (GLib.file_test(dir, GLib.FileTest.IS_DIR)) return dir
+    }
+    return "/sys/class/power_supply/BAT0"
+})()
+
 // Battery stats file reader helper
 function readBatFile(file: string): string {
     try {
-        const [ok, content] = GLib.file_get_contents(`/sys/class/power_supply/BAT0/${file}`)
+        const [ok, content] = GLib.file_get_contents(`${BAT_DIR}/${file}`)
         if (ok && content) {
             return new TextDecoder().decode(content).trim()
         }
@@ -230,6 +239,12 @@ function Workspaces() {
     const focusedWorkspace = createBinding(hyprland, "focusedWorkspace")
     const clients = createBinding(hyprland, "clients")
 
+    // "clients" solo notifica al abrir/cerrar ventanas; mover una a otro
+    // workspace no cambia la lista, así que forzamos el recálculo con un contador.
+    const [moves, setMoves] = createState(0)
+    const movedId = hyprland.connect("client-moved", () => setMoves(moves() + 1))
+    onCleanup(() => hyprland.disconnect(movedId))
+
     return (
         <box name="workspaces" class="workspaces" vertical={false} spacing={4} valign={Gtk.Align.CENTER}>
             {workspaceIds.map(id => {
@@ -239,6 +254,7 @@ function Workspaces() {
                 })
 
                 const clientIcons = createComputed(() => {
+                    moves()
                     const wsClients = clients().filter(c => c.workspace && c.workspace.id === id)
                     if (wsClients.length === 0) return ""
                     return wsClients.map(c => getWindowIcon(c.class)).join("")
@@ -654,9 +670,19 @@ function GPUModeWidget({ monitor }: { monitor: Gdk.Monitor }) {
     const setMode = modeState[1]
     
     const updateMode = () => {
-        execAsync("envycontrol --query")
-            .then(stdout => setMode(stdout.trim()))
-            .catch(print)
+        // supergfxctl (ASUS) on the G14; envycontrol on the old Intel/NVIDIA laptop.
+        // execAsync throws synchronously when the binary is missing, so guard with try.
+        const cmd = GLib.find_program_in_path("supergfxctl") ? "supergfxctl -g"
+            : GLib.find_program_in_path("envycontrol") ? "envycontrol --query"
+            : null
+        if (!cmd) return true
+        try {
+            execAsync(cmd)
+                .then(stdout => setMode(stdout.trim()))
+                .catch(print)
+        } catch (e) {
+            print(e)
+        }
         return true
     }
     
@@ -666,7 +692,7 @@ function GPUModeWidget({ monitor }: { monitor: Gdk.Monitor }) {
     const icon = createComputed(() => {
         const cleaned = (mode() || "").toLowerCase()
         if (cleaned === "hybrid") return "󰢮 Hyb"
-        if (cleaned === "nvidia") return "󰢮 Nvi"
+        if (cleaned === "nvidia" || cleaned === "asusmuxdgpu") return "󰢮 dGPU"
         if (cleaned === "integrated") return "󰘚 Int"
         return "󰘚"
     })
@@ -887,12 +913,17 @@ export function HardwareDashboard(gdkmonitor: Gdk.Monitor) {
     // CPU, Memory, GPU, Temperature polled values
     const cpuVal = createPoll(0, 3000, ["bash", "-c", "top -bn1 | grep 'Cpu(s)' | awk '{print 100 - $8}'"], stdout => parseFloat(stdout) / 100)
     const memVal = createPoll(0, 3000, ["bash", "-c", "free | awk '/Mem:/ {print $3/$2}'"], stdout => parseFloat(stdout))
-    const gpuVal = createPoll(0, 4000, ["bash", "-c", "v=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null); echo \"${v:-0}\""], stdout => parseFloat(stdout) / 100)
+    // iGPU (AMD): busy % straight from sysfs, no cost
+    const igpuVal = createPoll(0, 4000, ["bash", "-c", "for c in /sys/class/drm/card[0-9]*; do [ \"$(cat $c/device/vendor 2>/dev/null)\" = 0x1002 ] && cat $c/device/gpu_busy_percent && exit; done; echo 0"], stdout => parseFloat(stdout) / 100)
+    // dGPU (NVIDIA): nvidia-smi wakes the card from runtime suspend, so only call it
+    // when sysfs says it is already active; -1 = sleeping
+    const gpuVal = createPoll(-1, 4000, ["bash", "-c", "for d in /sys/bus/pci/devices/*; do [ \"$(cat $d/vendor)\" = 0x10de ] && [ \"$(cat $d/class)\" = 0x030000 -o \"$(cat $d/class)\" = 0x030200 ] || continue; if [ \"$(cat $d/power/runtime_status)\" = active ]; then v=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null); echo \"${v:-0}\"; else echo -1; fi; exit; done; echo -1"], stdout => parseFloat(stdout) / 100)
     const tempVal = createPoll(0, 4000, ["bash", "-c", "cat /sys/class/thermal/thermal_zone0/temp"], stdout => parseFloat(stdout) / 1000)
 
     const cpuLabel = createComputed(() => `${Math.round(cpuVal() * 100)}%`)
     const memLabel = createComputed(() => `${Math.round(memVal() * 100)}%`)
-    const gpuLabel = createComputed(() => `${Math.round(gpuVal() * 100)}%`)
+    const igpuLabel = createComputed(() => `${Math.round(igpuVal() * 100)}%`)
+    const gpuLabel = createComputed(() => gpuVal() < 0 ? "Sleeping" : `${Math.round(gpuVal() * 100)}%`)
     const tempLabel = createComputed(() => `${Math.round(tempVal())}°C`)
 
     return (
@@ -926,7 +957,8 @@ export function HardwareDashboard(gdkmonitor: Gdk.Monitor) {
                 <box class="dashboard-stats" vertical={true} spacing={12}>
                     <StatRow name="Processor (CPU)" icon="󰻠" value={cpuVal} label={cpuLabel} />
                     <StatRow name="Memory (RAM)" icon="󰍛" value={memVal} label={memLabel} />
-                    <StatRow name="Graphics Card (GPU)" icon="󰾲" value={gpuVal} label={gpuLabel} />
+                    <StatRow name="iGPU (Radeon)" icon="󰾲" value={igpuVal} label={igpuLabel} />
+                    <StatRow name="dGPU (NVIDIA)" icon="󰢮" value={gpuVal.as(v => Math.max(v, 0))} label={gpuLabel} />
                     <StatRow name="Temperature" icon="󰔏" value={tempVal.as(t => t / 100)} label={tempLabel} />
                 </box>
 

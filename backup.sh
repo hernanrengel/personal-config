@@ -78,6 +78,8 @@ CONFIG_DIRS=(
     "fusuma"
     "nvim"
     "systemd"
+    "wal"
+    "pipewire"
 )
 
 for dir in "${CONFIG_DIRS[@]}"; do
@@ -153,6 +155,17 @@ if [ -f "$HOME/.sdkman/etc/config" ]; then
     mkdir -p home/sdkman
     cp "$HOME/.sdkman/etc/config" home/sdkman/config
 fi
+
+# 4.6 Refresh tracked system files (only those already in etc/ and usr/)
+for sysdir in etc usr; do
+    [ -d "$sysdir" ] || continue
+    while IFS= read -r -d '' file; do
+        if [ -f "/$file" ]; then
+            cp "/$file" "$file"
+            echo -e "  -> Backed up /$file"
+        fi
+    done < <(find "$sysdir" -type f -print0)
+done
 
 # 5. Backup custom scripts from ~/scripts (excluding node_modules)
 echo -e "${YELLOW}[5/8] Backing up ~/scripts (excluding node_modules)...${NC}"

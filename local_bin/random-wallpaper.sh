@@ -129,6 +129,15 @@ awww img "$PIC" \
   --transition-fps=60 \
   --transition-step=20
 
+# Copia para el login (SDDM sugar-dark): mismo fondo en el login y al entrar al escritorio.
+# Reescalado a la resolución del panel y en JPG para que el greeter cargue rápido.
+SDDM_BG_DIR="/var/cache/sddm-wallpaper"
+if [ -w "$SDDM_BG_DIR" ]; then
+    magick "$PIC" -resize 2880x1800^ -gravity center -extent 2880x1800 -quality 90 \
+        "$SDDM_BG_DIR/current.jpg.tmp" 2>/dev/null \
+        && mv "$SDDM_BG_DIR/current.jpg.tmp" "$SDDM_BG_DIR/current.jpg" || true
+fi
+
 wal -n -q -i "$PIC" 2>&1 | grep -v "convert command is deprecated" >&2 || true
 
 # Bordes de Hyprland desde la paleta pywal:

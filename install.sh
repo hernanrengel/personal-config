@@ -45,6 +45,13 @@ if command -v paru &>/dev/null; then
     AUR_HELPER="paru"
 fi
 
+# 2.5 Enable multilib (steam, wine and lib32-* packages)
+if grep -q '^#\[multilib\]' /etc/pacman.conf; then
+    echo -e "${YELLOW}Enabling multilib repository...${NC}"
+    sudo sed -i '/^#\[multilib\]/{s/^#//;n;s/^#//}' /etc/pacman.conf
+    sudo pacman -Sy
+fi
+
 # 3. Install native pacman packages
 if [ -f packages/pacman-packages.txt ]; then
     echo -e "${YELLOW}Installing native pacman packages...${NC}"
@@ -283,6 +290,17 @@ if [ "$CURRENT_SHELL" != "$ZSH_PATH" ]; then
     sudo chsh -s "$ZSH_PATH" "$USER"
 fi
 
+# 10.5 Restore system files (etc/ -> /etc, usr/ -> /usr): copied, not symlinked,
+# since root/greeters read them at boot (and can't read $HOME)
+for sysdir in etc usr; do
+    [ -d "$sysdir" ] || continue
+    echo -e "${YELLOW}Restoring system files to /$sysdir...${NC}"
+    while IFS= read -r -d '' file; do
+        sudo install -Dm644 "$file" "/$file"
+        echo -e "  -> Installed ${GREEN}/$file${NC}"
+    done < <(find "$sysdir" -type f -print0)
+done
+
 # 11. Enable System Services
 echo -e "${YELLOW}Enabling required system services...${NC}"
 SERVICES_TO_ENABLE=("bluetooth" "docker" "supergfxd" "asusd")
@@ -293,6 +311,18 @@ for service in "${SERVICES_TO_ENABLE[@]}"; do
         echo -e "  -> Enabled $service"
     fi
 done
+
+# 11.5 Display manager: SDDM (sugar-dark) with the current wallpaper as background
+if systemctl list-unit-files | grep -q "^sddm.service"; then
+    for dm in gdm lightdm; do
+        sudo systemctl disable "$dm.service" 2>/dev/null || true
+    done
+    sudo systemctl disable ly@tty2.service 2>/dev/null || true
+    # random-wallpaper.sh copies each new wallpaper here for the greeter
+    sudo install -d -m755 -o "$USER" -g "$USER" /var/cache/sddm-wallpaper
+    sudo systemctl enable sddm.service
+    echo -e "  -> Enabled SDDM"
+fi
 
 echo -e "\n${GREEN}=== Restore Complete! ===${NC}"
 echo -e "Please log out and log back in (or reboot) for all changes, the shell, and Hyprland variables to take effect."

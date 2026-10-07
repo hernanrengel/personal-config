@@ -57,7 +57,9 @@ progressbar.charging progress {
 separator { background-color: rgba(137,180,250,0.12); min-height: 1px; margin: 6px 0; }
 """
 
-BAT = "/sys/class/power_supply/BAT0"
+# BAT0 on the old laptop, BAT1 on the G14: use the first battery present
+BAT = next((f"/sys/class/power_supply/{n}" for n in ("BAT0", "BAT1", "BAT2")
+            if os.path.isdir(f"/sys/class/power_supply/{n}")), "/sys/class/power_supply/BAT0")
 
 def read(f):
     try:

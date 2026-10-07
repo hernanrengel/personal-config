@@ -2,9 +2,9 @@
 set -euo pipefail
 
 INTERNAL="eDP-1"
-EXPLICIT_MODE="1920x1080@60"
+EXPLICIT_MODE="2880x1800@120"
 EXPLICIT_POS="2560x0"
-EXPLICIT_SCALE="1"
+EXPLICIT_SCALE="1.6"
 NOTIFY_BIN="$(command -v notify-send || true)"
 BRIGHT_BIN="$(command -v brightnessctl || true)"
 FADE_MS=220     # total fade time (ms)
@@ -38,6 +38,13 @@ internal_disabled() {
 # ------------ brightness / fade ----------
 # Returns a usable brightness device or empty if none.
 detect_backlight_dev() {
+  # G14: la pantalla interna va por la Radeon (amdgpu_bl*); nvidia_0 aparece primero pero no controla nada
+  local amd
+  amd="$(ls -1 /sys/class/backlight 2>/dev/null | grep -m1 '^amdgpu_bl' || true)"
+  if [[ -n "$amd" ]]; then
+    printf '%s' "$amd"
+    return
+  fi
   # Prefer brightnessctl discovery; fallback to /sys/class/backlight
   if [[ -n "$BRIGHT_BIN" ]]; then
     # brightnessctl --machine-readable lists devices; pick first backlight

@@ -16,15 +16,20 @@ start_awww_once() {
 }
 
 apply_wallpaper() {
-    echo "Applying wallpaper: $WALLPAPER"
     sleep "$DELAY"
-    awww img "$WALLPAPER" --transition-type fade --transition-fps 60
+    # Reusar el fondo actual (el de random-wallpaper.sh) en el monitor nuevo; fallback fijo
+    local current
+    current="$(awww query 2>/dev/null | sed -n 's/.*currently displaying: image: //p' | head -n1)"
+    [ -f "$current" ] || current="$WALLPAPER"
+    echo "Applying wallpaper: $current"
+    awww img "$current" --transition-type fade --transition-fps 60
 }
 
 # --- Inicio ---
+# Sin apply_wallpaper aquí: awww-daemon restaura de su caché el último fondo,
+# que es el mismo que mostró el login (SDDM), así la entrada no cambia de imagen.
 sleep 2
 start_awww_once
-apply_wallpaper
 
 # Escuchar cambios de monitor usando socat apuntando al socket oficial de Hyprland
 while true; do
