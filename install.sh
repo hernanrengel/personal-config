@@ -101,6 +101,11 @@ symlink_item() {
     local src="$1"
     local dest="$2"
     
+    # Resolve relative source paths to absolute paths
+    if [[ "$src" != /* ]]; then
+        src="$REPO_DIR/$src"
+    fi
+    
     if [ -e "$dest" ] || [ -L "$dest" ]; then
         # If it's already symlinked to the correct path, skip
         if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$src")" ]; then
