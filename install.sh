@@ -265,7 +265,7 @@ fi
 echo -e "${YELLOW}Setting up ZSH and Oh My Zsh...${NC}"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo -e "  -> Oh My Zsh not found. Installing..."
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
 fi
 
 # Install custom plugins if not present
