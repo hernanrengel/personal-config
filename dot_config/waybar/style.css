@@ -5,7 +5,7 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-@import url("/home/brosso3d/.cache/wal/colors-wb.css");
+@import url("../../.cache/wal/colors-wb.css");
 
 /* Semantic colors (Fixed alerts, regardless of wallpaper palette) */
 @define-color ok    #a6e3a1;

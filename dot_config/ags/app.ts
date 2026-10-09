@@ -1,4 +1,5 @@
 import app from "ags/gtk3/app"
+import GLib from "gi://GLib"
 import style from "./style.css"
 import Bar, { 
   HardwareDashboard, 
@@ -78,7 +79,7 @@ function stopWidgets(monitor: Gdk.Monitor) {
 }
 
 app.start({
-  css: style,
+  css: `@import url("${GLib.get_home_dir()}/.cache/wal/colors-wb.css");\n${style}`,
   main() {
     // Start for existing monitors
     app.get_monitors().forEach(startWidgets)

@@ -130,7 +130,7 @@
         "format-icons": ["󱃃", "󰔏", "󰸁"]
     },
     "battery": {
-        "bat": "BAT0",
+        "bat": "BAT1",
         "adapter": "ADP1",
         "states": { "good": 95, "warning": 35, "critical": 25 },
         "format": "{capacity}% {icon}",

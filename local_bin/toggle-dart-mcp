@@ -1,10 +1,10 @@
 #!/bin/bash
 
 FILES=(
-  "/home/brosso3d/.gemini/config/mcp_config.json"
-  "/home/brosso3d/.gemini/antigravity/mcp_config.json"
-  "/home/brosso3d/.gemini/antigravity-ide/mcp_config.json"
-  "/home/brosso3d/.gemini/antigravity-backup/mcp_config.json"
+  "$HOME/.gemini/config/mcp_config.json"
+  "$HOME/.gemini/antigravity/mcp_config.json"
+  "$HOME/.gemini/antigravity-ide/mcp_config.json"
+  "$HOME/.gemini/antigravity-backup/mcp_config.json"
 )
 
 if jq -e '.disabledMcpServers["dart-mcp-server"]' "${FILES[0]}" >/dev/null 2>&1; then

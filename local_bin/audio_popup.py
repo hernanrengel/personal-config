@@ -123,16 +123,17 @@ def clean_sink_name(name, desc):
     name_lower = name.lower()
     if "jbl" in desc_lower or "jbl" in name_lower:
         return "󰋋  Audífonos JBL (USB-C)"
-    if "speaker" in desc_lower or "speaker" in name_lower:
+    # G14: parlantes = Ryzen HD Audio analógico
+    if "speaker" in desc_lower or "speaker" in name_lower or ("ryzen" in desc_lower and "analog" in desc_lower):
         return "󰓃  Altavoces de la Laptop"
-    if "ga107" in name_lower or ("hdmi" in desc_lower and "raptor" not in desc_lower):
+    # Puerto HDMI de la G14 va por la NVIDIA (GB205); ga107 = laptop vieja
+    if "ga107" in name_lower or "gb205" in desc_lower or "nvidia" in desc_lower:
         return "󰍹  Monitor HDMI"
-    if "raptor" in desc_lower and "hdmi" in desc_lower:
-        try:
-            num = desc.split("HDMI / DisplayPort ")[-1].split(" Output")[0]
-            return f"󰍹  Intel HDMI/DP {num}"
-        except Exception:
-            return "󰍹  Intel HDMI/DP"
+    # Salidas de video por USB-C (DisplayPort) van por la Radeon
+    if "radeon" in desc_lower and ("hdmi" in desc_lower or "digital" in desc_lower):
+        return "󰍹  Pantalla USB-C"
+    if "hdmi" in desc_lower:
+        return "󰍹  Monitor HDMI"
     if "virtual" in desc_lower or "loopback" in name_lower:
         return "󰍬  Audio Virtual (KVM)"
     return desc[:45]
@@ -172,8 +173,13 @@ def get_sinks():
     default = get_default_sink()
     filtered_sinks = []
     for s_name, s_desc in sinks:
-        is_intel_hdmi = "raptor" in s_desc.lower() and "hdmi" in s_desc.lower()
-        if not is_intel_hdmi or s_name == default:
+        # Ocultar sinks virtuales (EasyEffects, entrada del mic del KVM) y salidas
+        # USB-C de la Radeon salvo que estén activas
+        if s_name in ("easyeffects_sink", "kvm_virtual_mic_input"):
+            continue
+        d = s_desc.lower()
+        is_radeon_display = "radeon" in d and ("hdmi" in d or "digital" in d)
+        if not is_radeon_display or s_name == default:
             filtered_sinks.append((s_name, clean_sink_name(s_name, s_desc)))
     return filtered_sinks
 

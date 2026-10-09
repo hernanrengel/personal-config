@@ -3,7 +3,7 @@
 INTERNAL="eDP-1"
 WALLPAPER="$HOME/Pictures/Wallpapers/wallpapersden.com_astronaut-with-jellyfish_2560x1440.jpg"
 DELAY=1.5
-TOGGLE_SCRIPT="/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh"
+TOGGLE_SCRIPT="$HOME/.config/hypr/scripts/toggle-internal-monitor.sh"
 
 echo "Monitor manager started."
 

@@ -67,15 +67,15 @@
     "custom/monitor-toggle": {
         "format": "{}",
         "return-type": "json",
-        "exec": "/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh --status",
-        "on-click": "/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh --toggle",
+        "exec": "$HOME/.config/hypr/scripts/toggle-internal-monitor.sh --status",
+        "on-click": "$HOME/.config/hypr/scripts/toggle-internal-monitor.sh --toggle",
         "signal": 5,
         "tooltip": true
     },
     "custom/super-drag": {
-        "exec": "/home/brosso3d/.config/hypr/scripts/super-drag-status.sh",
+        "exec": "$HOME/.config/hypr/scripts/super-drag-status.sh",
         "signal": 6,
-        "on-click": "/home/brosso3d/.config/hypr/scripts/toggle-super-drag.sh",
+        "on-click": "$HOME/.config/hypr/scripts/toggle-super-drag.sh",
         "tooltip": false,
         "format": "{}"
     },
@@ -179,7 +179,7 @@
         "format-icons": ["󱃃", "󰔏", "󰸁"]
     },
     "battery": {
-        "bat": "BAT0",
+        "bat": "BAT1",
         "adapter": "ADP1",
         "states": { "good": 95, "warning": 35, "critical": 25 },
         "format": "{capacity}% {icon}",

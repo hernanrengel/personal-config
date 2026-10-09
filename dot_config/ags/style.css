@@ -1,4 +1,3 @@
-@import url("/home/brosso3d/.cache/wal/colors-wb.css");
 
 /* Semantic colors (Fixed alerts, regardless of wallpaper palette) */
 @define-color ok    #a6e3a1;
@@ -39,6 +38,23 @@ window.BarWindow {
               inset 0 1px 1px alpha(#ffffff, 0.1);
 }
 
+
+/* OLED: la barra se atenúa cuando no la usas y vuelve al 100% con el mouse encima */
+.glassy-premium-bar {
+  opacity: 0.55;
+  transition: opacity 400ms ease;
+}
+
+/* OLED: pixel shift (Bar.tsx rota estas clases cada 3 min); padding total constante */
+.glassy-premium-bar.shift-0 { padding: 4px 20px 4px 20px; }
+.glassy-premium-bar.shift-1 { padding: 3px 18px 5px 22px; }
+.glassy-premium-bar.shift-2 { padding: 3px 22px 5px 18px; }
+.glassy-premium-bar.shift-3 { padding: 5px 22px 3px 18px; }
+.glassy-premium-bar.shift-4 { padding: 5px 18px 3px 22px; }
+
+.glassy-premium-bar.awake {
+  opacity: 1;
+}
 
 .glassy-premium-bar:hover {
   background-color: alpha(@wb-bg, 0.50);

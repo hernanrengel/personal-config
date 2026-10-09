@@ -121,19 +121,21 @@ function cleanSinkName(name: string | null, desc: string | null): string {
     if (descLower.includes("jbl") || nameLower.includes("jbl")) {
         return "󰋋  JBL Headphones (USB-C)"
     }
-    if (descLower.includes("speaker") || nameLower.includes("speaker")) {
+    // G14: parlantes = Ryzen HD Audio analógico
+    if (descLower.includes("speaker") || nameLower.includes("speaker")
+        || (descLower.includes("ryzen") && descLower.includes("analog"))) {
         return "󰓃  Laptop Speakers"
     }
-    if (nameLower.includes("ga107") || (descLower.includes("hdmi") && !descLower.includes("raptor"))) {
+    // Puerto HDMI de la G14 va por la NVIDIA (GB205); ga107 = laptop vieja
+    if (nameLower.includes("ga107") || descLower.includes("gb205") || descLower.includes("nvidia")) {
         return "󰍹  HDMI Monitor"
     }
-    if (descLower.includes("raptor") && descLower.includes("hdmi")) {
-        try {
-            const num = (desc || "").split("HDMI / DisplayPort ").pop()?.split(" Output")[0] || ""
-            return `󰍹  Intel HDMI/DP ${num}`.trim()
-        } catch {
-            return "󰍹  Intel HDMI/DP"
-        }
+    // Salidas de video por USB-C (DisplayPort) van por la Radeon
+    if (descLower.includes("radeon") && (descLower.includes("hdmi") || descLower.includes("digital"))) {
+        return "󰍹  USB-C Display"
+    }
+    if (descLower.includes("hdmi")) {
+        return "󰍹  HDMI Monitor"
     }
     if (descLower.includes("virtual") || nameLower.includes("loopback")) {
         return "󰍬  Virtual Audio (KVM)"
@@ -421,14 +423,14 @@ function Media() {
 
 /* ── Island Utils: Monitor, SuperDrag, Keyboard Backlight ── */
 function MonitorToggle() {
-    const statusJson = createPoll("", 5000, ["/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh", "--status"])
+    const statusJson = createPoll("", 5000, [`${GLib.get_home_dir()}/.config/hypr/scripts/toggle-internal-monitor.sh`, "--status"])
     const text = statusJson.as(str => {
         try { return JSON.parse(str).text || "󰌢" } catch { return "󰌢" }
     })
     return (
         <button
             name="custom-monitor-toggle"
-            onClicked={() => execAsync("/home/brosso3d/.config/hypr/scripts/toggle-internal-monitor.sh --toggle").catch(print)}
+            onClicked={() => execAsync(`${GLib.get_home_dir()}/.config/hypr/scripts/toggle-internal-monitor.sh --toggle`).catch(print)}
         >
             <label label={text} />
         </button>
@@ -436,12 +438,12 @@ function MonitorToggle() {
 }
 
 function SuperDrag() {
-    const statusText = createPoll("", 5000, ["/home/brosso3d/.config/hypr/scripts/super-drag-status.sh"])
+    const statusText = createPoll("", 5000, [`${GLib.get_home_dir()}/.config/hypr/scripts/super-drag-status.sh`])
     const text = statusText.as(s => s || "󰍽")
     return (
         <button
             name="custom-super-drag"
-            onClicked={() => execAsync("/home/brosso3d/.config/hypr/scripts/toggle-super-drag.sh").catch(print)}
+            onClicked={() => execAsync(`${GLib.get_home_dir()}/.config/hypr/scripts/toggle-super-drag.sh`).catch(print)}
         >
             <label label={text} />
         </button>
@@ -831,6 +833,22 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         return nonMpv.length > 0
     })
 
+    // OLED: pixel shift. Cada 3 min el contenido se corre ±2 px (5 posiciones) para
+    // que ningún píxel de la barra quede fijo por horas. El alto total no cambia.
+    const [shift, setShift] = createState(0)
+    const shiftId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 180, () => {
+        setShift((shift() + 1) % 5)
+        return true
+    })
+    onCleanup(() => GLib.source_remove(shiftId))
+
+    // OLED: atenuada por defecto, al 100% con el mouse encima. Un box no recibe :hover
+    // en GTK3, así que lo maneja un eventbox; pasar a un botón hijo emite leave-notify
+    // con detail INFERIOR, que se ignora (solo cuenta salir de la barra).
+    const [awake, setAwake] = createState(false)
+    const barClass = createComputed(() =>
+        `glassy-premium-bar shift-${shift()}${awake() ? " awake" : ""}`)
+
     return (
         <window
             class="BarWindow"
@@ -840,7 +858,14 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
             anchor={TOP | LEFT | RIGHT}
             application={app}
         >
-            <box class="glassy-premium-bar" halign={Gtk.Align.FILL} hexpand={true} vertical={false} valign={Gtk.Align.START}>
+            <eventbox
+                onEnterNotifyEvent={() => { setAwake(true); return false }}
+                onLeaveNotifyEvent={(_self: Gtk.Widget, ev: Gdk.EventCrossing) => {
+                    if (ev.detail !== Gdk.NotifyType.INFERIOR) setAwake(false)
+                    return false
+                }}
+            >
+            <box class={barClass} halign={Gtk.Align.FILL} hexpand={true} vertical={false} valign={Gtk.Align.START}>
                 <centerbox 
                     halign={Gtk.Align.FILL} 
                     hexpand={true} 
@@ -884,6 +909,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
                     }
                 />
             </box>
+            </eventbox>
         </window>
     )
 }
@@ -970,7 +996,7 @@ export function HardwareDashboard(gdkmonitor: Gdk.Monitor) {
                         class="action-btn"
                         onClicked={() => {
                             state.setVisible(false)
-                            execAsync("/home/brosso3d/.local/bin/stats-popup.sh").catch(print)
+                            execAsync(`${GLib.get_home_dir()}/.local/bin/stats-popup.sh`).catch(print)
                         }}
                     >
                         <box spacing={6} vertical={false} valign={Gtk.Align.CENTER}>
@@ -1065,7 +1091,7 @@ export function CalendarDashboard(gdkmonitor: Gdk.Monitor) {
 
     const fetchAgenda = () => {
         setIsRefreshing(true)
-        execAsync(["bash", "-c", "cd /home/brosso3d/scripts && node check_calendar.mjs | sed -n '/===== Próximos 7 días =====/,$p' | tail -n +3"])
+        execAsync(["bash", "-c", "cd $HOME/scripts && node check_calendar.mjs | sed -n '/===== Próximos 7 días =====/,$p' | tail -n +3"])
             .then(stdout => {
                 setAgendaText(stdout.trim() || "No hay eventos próximos en los siguientes 7 días.")
                 setIsRefreshing(false)
@@ -1203,14 +1229,17 @@ export function AudioDashboard(gdkmonitor: Gdk.Monitor) {
     const defaultSpeaker = createBinding(audio, "default-speaker")
     const defaultMicrophone = createBinding(audio, "default-microphone")
 
-    // Filter output speakers (exclude raptor hdmi unless active)
+    // Filter output speakers: hide virtual sinks (EasyEffects, KVM mic input) and
+    // Radeon USB-C display outputs unless active
     const filteredSpeakers = createComputed(() => {
         const list = speakersList()
         const def = defaultSpeaker()
         return list.filter(s => {
-            const desc = s.description || ""
-            const isIntelHdmi = desc.toLowerCase().includes("raptor") && desc.toLowerCase().includes("hdmi")
-            return !isIntelHdmi || (def && s.name === def.name)
+            const desc = (s.description || "").toLowerCase()
+            const name = (s.name || "").toLowerCase()
+            if (name === "easyeffects_sink" || name === "kvm_virtual_mic_input") return false
+            const isRadeonDisplay = desc.includes("radeon") && (desc.includes("hdmi") || desc.includes("digital"))
+            return !isRadeonDisplay || (def && s.name === def.name)
         })
     })
 
